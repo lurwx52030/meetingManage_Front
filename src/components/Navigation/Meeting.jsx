@@ -50,7 +50,7 @@ const Meeting = () => {
       cellRenderer: (params) => (
         <Button onClick={() => handleLook(params.data.name)}>
           <img src={calendaricon} className="calendaricon" alt="calendaricon" />
-          </Button>
+        </Button>
       ),
       cellStyle: () => ({
         display: "flex",
@@ -129,10 +129,13 @@ const Meeting = () => {
 
     const confirm = window.confirm(`您確定要刪除這個會議嗎?`);
     if (confirm) {
-      fetch(deleteUrl, { method: "DELETE" })
+      fetch(deleteUrl, {
+        method: "DELETE",
+        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+      })
         .then(resp => resp.json())
         .then(resp => {
-          console.log("Delete Response:", resp);
+          alert('刪除成功!');
           getMeetings();
         })
         .catch(error => {

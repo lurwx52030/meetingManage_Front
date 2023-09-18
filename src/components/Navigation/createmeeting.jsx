@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './createmeeting.css'; // 導入CSS
 
 
@@ -35,6 +36,9 @@ const CreateMeeting = () => {
             })
     }, [])
 
+
+    const navigate = useNavigate();
+
     //會議通知radio
     const [announcement, setAnnouncement] = useState('');
     const onOptionChange = e => {
@@ -65,9 +69,14 @@ const CreateMeeting = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const create = { name, start, end, meetingRoomId, creatorId, notificationTime };
-        (new Date(end)).toISOString();
-        (new Date(start)).toISOString();
+        const create = {
+            name,
+            start: (new Date(start)).toISOString(),
+            end: (new Date(end)).toISOString(),
+            meetingRoomId,
+            creatorId,
+            notificationTime
+        };
 
         fetch('http://localhost:5000/meeting', {
             method: 'POST',
@@ -79,7 +88,18 @@ const CreateMeeting = () => {
             }
         })
             .then(res => res.json())
-            .then(res => console.log(res))
+            .then(res => {
+                switch (res.status) {
+                    case 200:
+                        alert('新增會議成功!')
+                        navigate('/meeting')
+                        break;
+                    default:
+                        console.log(res)
+                        alert(res.message)
+                        break;
+                }
+            })
     }
 
 
@@ -131,7 +151,7 @@ const CreateMeeting = () => {
                 <div className='createmeeting_row'>
                     <div>
                         <label><b>會議地點：</b></label>
-                        <select className="custom-select" id="shopSearchSelect" onChange={(e)=>setmeetingRoomId(e.target.value)}>
+                        <select className="custom-select" id="shopSearchSelect" onChange={(e) => setmeetingRoomId(e.target.value)}>
                             <option value=''>請選擇會議地點</option>
                             {
                                 meetingRooms.map(meetingRoom => {

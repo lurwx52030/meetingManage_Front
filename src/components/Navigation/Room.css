@@ -1,0 +1,48 @@
+.search input[type="text"] {
+  background-color: #c8c4c4;
+  /* 背景為灰色 */
+  padding: 5px;
+  /* 調整內邊距 */
+  border: 1px solid #ccc;
+  /* 添加邊框 */
+  border-radius: 3px;
+  /* 圓角效果 */
+}
+
+
+.search input[type="text"]:hover {
+  background-color: #e0e0e0;
+  /* 當屬標停留在上面，變成淺灰色*/
+}
+
+.roomContainer {
+  width: 1300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.search {
+  /* position: relative; */
+  /* left: 100px; */
+  width: 70%;
+  /* 寬度調整 */
+  margin-top: 100px;
+}
+
+
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  /*設定按鈕的間距*/
+}
+
+.look2-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+}

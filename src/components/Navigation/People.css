@@ -1,0 +1,78 @@
+.center-container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+    justify-content: center; */
+  /* height: 100vh; */
+}
+
+.user-table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: auto;
+  margin-top: 100px;
+}
+
+.user-table th, .user-table td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+.PeopleContainer{
+  width: 1300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-table th {
+  background-color: #f2f2f2;
+}
+
+.user-table button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.user-table button:hover {
+  background-color: #d32f2f;
+}
+
+
+.search {
+  /* position: relative; */
+  /* left: 220px; */
+  width: 50%;
+  /* 寬度調整 */
+  margin-top: 95px;
+  margin-bottom: 10px;
+  /* 增加底部間距 */
+}
+
+.center-table {
+  margin: auto;
+}
+
+.edit1-button,
+.delete1-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.ui.button {
+  box-shadow: none;
+}
+
+
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  /*設定按鈕的間距*/
+}

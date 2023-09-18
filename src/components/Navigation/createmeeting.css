@@ -1,0 +1,45 @@
+.createmeeting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.createmeeting_row {
+    display: flex;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    width: 50%;
+}
+  
+
+.row {
+    display: flex;
+    justify-content: space-between; /* 均勻分布對齊，靠左及靠右 */
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    width: 50%;
+  }
+
+
+
+.row label {
+    font-size: 19px;
+    margin-bottom: 20px;
+    width: 100px;
+    text-align: right;
+}
+
+.row input[type="radio"] {
+    align-self: flex-end; /* 單獨對齊按鈕 */
+  }
+
+
+
+
+
+
+
+
+

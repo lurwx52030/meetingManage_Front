@@ -8,6 +8,8 @@ import binicon from '../../image/bin.png';
 import calendaricon from '../../image/calendar.png';
 import wrenchicon from '../../image/wrench.png';
 import './Meeting.css';
+import { useNavigate } from 'react-router-dom';
+import { useIsLoginStore } from '../../store/useIsLoginStore';
 
 
 //查詢
@@ -25,8 +27,9 @@ const Meeting = () => {
   const [rowData, setRowData] = useState([]);
   const url = ' http://localhost:5000/meeting';
 
+  const navigate = useNavigate();
 
-
+  const { isLogin, setIsLogin } = useIsLoginStore();
 
   const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editable:可編輯的
     { headerName: '會議ID', field: 'id', filter: true, sortable: true, checkboxSelection: true },
@@ -98,6 +101,10 @@ const Meeting = () => {
     }).catch(err => {
       if (err.response.status === 401) {
         alert("請重新登入！")
+        localStorage.removeItem("jwtToken")
+        localStorage.removeItem('userid')
+        setIsLogin(false)
+        navigate('/')
       }
     })
     // fetch(url, {

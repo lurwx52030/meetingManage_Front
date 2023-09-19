@@ -35,6 +35,8 @@ const MeetingRoom = () => {
       setRowData(res.data.data)
     }).catch(err => {
       if (err.response.status === 401) {
+        localStorage.removeItem("jwtToken")
+        localStorage.removeItem('userid')
         alert("請重新登入！")
         setIsLogin(false)
       }

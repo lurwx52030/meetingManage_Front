@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import binicon from '../../image/bin.png';
 import wrenchicon from '../../image/wrench.png';
+import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './People.css';
 
 const OperateCellRenderer = (params) => {
@@ -85,6 +86,7 @@ const People = ({ loginData, setLoginData }) => {
   const url = 'http://localhost:5000/user'
 
   const navigate = useNavigate()
+  const { isLogin, setIsLogin } = useIsLoginStore();
 
   const handleDeleteClick = (id) => {
     // 刪除按鈕事件
@@ -156,7 +158,23 @@ const People = ({ loginData, setLoginData }) => {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
       }
-    }).then(resp => resp.json()).then(resp => setRowData(resp.data))
+    }).then(resp => resp.json()).then(resp => {
+      console.log(resp)
+      switch (resp.statusCode) {
+        case 200:
+          setRowData(resp.data)
+          break;
+        case 401:
+          localStorage.removeItem("jwtToken")
+          localStorage.removeItem('userid')
+          alert("請重新登入！")
+          navigate("/")
+          setIsLogin(false)
+          break;
+        default:
+          break;
+      }
+    })
   }
 
   const onGridReady = (params) => {

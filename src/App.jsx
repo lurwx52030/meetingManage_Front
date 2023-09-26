@@ -62,6 +62,7 @@ import Updateuser from './components/Navigation/Updateuser';
 import Createmeeting from './components/Navigation/createmeeting';
 import Home from './components/Navigation/home';
 import Login from './components/Navigation/login';
+import UpdateMeeting from './components/Navigation/updatemeeting';
 import { useIsLoginStore } from './store/useIsLoginStore';
 // import Roomdeatails from './components/Navigation/Roomdeatails'
 
@@ -81,7 +82,8 @@ const App = () => {
         <Route path="/meeting" element={<Meeting />} />
         <Route path="/meetingRoom" element={<MeetingRoom />} />
         <Route path="/People" element={<People />} />
-        <Route path='/edit' element={<Updateuser />} />
+        <Route path='/editUser' element={<Updateuser />} />
+        <Route path='/editMeeting' element={<UpdateMeeting />} />
         <Route path='/personal' element={<Personal />} />
       </Routes>
     </Router>

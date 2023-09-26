@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './createmeeting.css'; // 導入CSS
 
 
@@ -12,6 +12,8 @@ const CreateMeeting = () => {
     const [meetingRoomId, setmeetingRoomId] = useState('');
     const [creatorId, setcreatorId] = useState(localStorage.getItem('userid'));
     const [notificationTime, setnotificationTime] = useState(0);
+
+    const { isLogin, setIsLogin } = useIsLoginStore();
 
     const [meetingRooms, setmeetingRooms] = useState([])
     useEffect(() => {
@@ -25,14 +27,23 @@ const CreateMeeting = () => {
         })
             .then(res => res.json())
             .then(res => {
-                switch (res.status) {
-                    case 200:
+                if (res.status) {
+                    if (res.status === 200) {
                         setmeetingRooms(res.data);
-                        break;
-                    default:
-                        alert("server error!");
-                        break;
+                    }
                 }
+
+                if (res.statusCode) {
+                    if (res.statusCode === 401) {
+                        alert("請重新登入！")
+                        localStorage.removeItem("jwtToken")
+                        localStorage.removeItem('userid')
+                        setIsLogin(false)
+                        navigate('/')
+                    }
+                }
+            })
+            .catch(err => {
             })
     }, [])
 
@@ -44,28 +55,6 @@ const CreateMeeting = () => {
     const onOptionChange = e => {
         setAnnouncement(e.target.value)
     }
-    // 上傳檔案
-    const [file, setFile] = useState(null);
-    const [result, setResult] = useState('');
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-    };
-    const handleUpload = async () => {
-        if (!file) {
-            setResult('請選擇要上傳的檔案');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('fileToUpload', file);
-
-        try {
-            const response = await axios.post('your_ibon_upload_endpoint', formData);
-            setResult('檔案上傳成功: ' + response.data.message);
-        } catch (error) {
-            setResult('檔案上傳失敗: ' + error.message);
-        }
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -158,28 +147,8 @@ const CreateMeeting = () => {
                                     return <option key={meetingRoom.id} value={meetingRoom.id}>{meetingRoom.name}</option>
                                 })
                             }
-                            {/* <option value="A101">A101</option>
-                            <option value="A102">A102</option>
-                            <option value="B201">B201</option>
-                            <option value="B202">B202</option> */}
                         </select>
                     </div>
-                </div>
-                <div className='createmeeting_row'>
-                    <div>
-                        <label><b>會議資料：</b></label>
-                    </div>
-                    <div>
-                        <input type="file" onChange={handleFileChange} multiple />
-                        <button onClick={handleUpload}>上傳檔案</button>
-                        <div>{result}</div>
-                    </div>
-                </div>
-                <div className='createmeeting_row'>
-                    <div>
-                        <label><b>會議參與者：</b></label>
-                    </div>
-
                 </div>
                 <div className='createmeeting_row'>
                     <button type="create"><b>建立</b></button>

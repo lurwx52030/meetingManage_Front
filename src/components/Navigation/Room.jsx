@@ -92,15 +92,16 @@ const MeetingRoom = () => {
         />
         <button onClick={() => handleSearch(key)}>查詢</button>
       </div>
-      <div className="ag-theme-alpine center-table" style={{ height: 500, width: '770px' }}>
+      <div className="ag-theme-alpine center-table" style={{ height: '100vw', width: '100vw' }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
           rowSelection='multiple'//同時選擇多行
           animateRows={true} //整行式變動
           frameworkComponents={frameworkComponents}
-        // onCellClicked={cellClickedListener}
-
+          onGridReady={(event => {
+            event.api.sizeColumnsToFit()
+          })}
         />
       </div>
     </div>

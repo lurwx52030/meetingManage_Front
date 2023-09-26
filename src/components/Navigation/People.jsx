@@ -113,7 +113,7 @@ const People = ({ loginData, setLoginData }) => {
 
   const handleEditClick = (data) => {
     console.log(data)
-    navigate('/edit', { state: data })
+    navigate('/editUser', { state: data })
   };
 
   const columnDefs = [
@@ -177,12 +177,6 @@ const People = ({ loginData, setLoginData }) => {
     })
   }
 
-  const onGridReady = (params) => {
-    setGridApi(params)
-  }
-
-
-
   return (
     <div className="PeopleContainer">
       <h2>人員管理</h2>
@@ -194,14 +188,16 @@ const People = ({ loginData, setLoginData }) => {
         />
         <button onClick={handleSearch}>查詢</button>
       </div>
-      <div className="ag-theme-alpine center-table" style={{ height: 500, width: '990px' }}>
+      <div className="ag-theme-alpine center-table" style={{ height: '100vw', width: '100vw' }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
           rowSelection='multiple'//同時選擇多行
           animateRows={true} //整行式變動
           frameworkComponents={frameworkComponents}
-          onDridReady={onGridReady}
+          onGridReady={(event => {
+            event.api.sizeColumnsToFit()
+          })}
         // onCellClicked={cellClickedListener}
         />
       </div>

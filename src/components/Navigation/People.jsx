@@ -2,7 +2,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import axios from "axios";
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import binicon from '../../image/bin.png';
 import wrenchicon from '../../image/wrench.png';
@@ -32,20 +32,6 @@ const People = ({ loginData, setLoginData }) => {
   const frameworkComponents = {
     operateCellRenderer: OperateCellRenderer,
   };
-  // const [searchTerm, setSearchTerm] = useState('');
-  // 
-  // const handleDeleteUser = (employeeId) => {
-  // const updatedLoginData = loginData.filter(user => user.employeeId !== employeeId);
-  // setLoginData(updatedLoginData);
-  // };
-
-  // const filteredUsers = loginData.filter(user => {
-  // return (
-  // user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  // user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  // user.employeeId.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-  // });
 
   const handleSearch = () => {
     console.log(key)
@@ -82,6 +68,7 @@ const People = ({ loginData, setLoginData }) => {
   const [rowData, setRowData] = useState([]);
   const [key, setKey] = useState('')
   const url = 'http://localhost:5000/user'
+  const agGridRef = useRef()
 
   const navigate = useNavigate()
   const { isLogin, setIsLogin } = useIsLoginStore();
@@ -148,12 +135,14 @@ const People = ({ loginData, setLoginData }) => {
     }
   ];
 
-  // const cellClickedListener = useCallback( event => {
-  //   console.log('cellClicked', event);
-  // });
-
   useEffect(() => {
+    window.addEventListener('resize', resizeUpdate)
     getUsers()
+
+    return () => {
+      // remove Listener when component destroy
+      window.removeEventListener('resize', resizeUpdate);
+    }
   }, [])
 
 
@@ -191,6 +180,24 @@ const People = ({ loginData, setLoginData }) => {
       })
   }
 
+  const resizeUpdate = () => {
+    autoSizeAll()
+    sizeToFit()
+  }
+
+
+  const sizeToFit = useCallback(() => {
+    agGridRef.current.api.sizeColumnsToFit();
+  }, []);
+
+  const autoSizeAll = useCallback((skipHeader) => {
+    const allColumnIds = [];
+    agGridRef.current.columnApi.getColumns().forEach((column) => {
+      allColumnIds.push(column.getId());
+    });
+    agGridRef.current.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+  }, []);
+
   return (
     <div className="PeopleContainer">
       <h2>人員管理</h2>
@@ -204,6 +211,7 @@ const People = ({ loginData, setLoginData }) => {
       </div>
       <div className="ag-theme-alpine" style={{ height: '100vw', width: '80vw' }}>
         <AgGridReact
+          ref={agGridRef}
           rowData={rowData}
           columnDefs={columnDefs}
           rowSelection='multiple'//同時選擇多行

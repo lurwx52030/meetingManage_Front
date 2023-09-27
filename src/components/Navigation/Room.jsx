@@ -2,7 +2,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BsWindowStack } from "react-icons/bs";
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './Room.css';
@@ -25,8 +25,19 @@ const MeetingRoom = () => {
   const [rowData, setRowData] = useState([])
   const [key, setKey] = useState('')
   const { isLogin, setIsLogin } = useIsLoginStore();
+  const agGridRef = useRef()
 
   useEffect(() => {
+
+    window.addEventListener('resize', resizeUpdate)
+    getMeetingRooms()
+    return () => {
+      // remove Listener when component destroy
+      window.removeEventListener('resize', resizeUpdate);
+    }
+  }, [])
+
+  const getMeetingRooms = () => {
     axios.get('http://localhost:5000/meeting-room', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
@@ -41,14 +52,30 @@ const MeetingRoom = () => {
         setIsLogin(false)
       }
     })
-  }, [])
+  }
+
+  const resizeUpdate = () => {
+    autoSizeAll()
+    sizeToFit()
+  }
+
+
+  const sizeToFit = useCallback(() => {
+    agGridRef.current.api.sizeColumnsToFit();
+  }, []);
+
+  const autoSizeAll = useCallback((skipHeader) => {
+    const allColumnIds = [];
+    agGridRef.current.columnApi.getColumns().forEach((column) => {
+      allColumnIds.push(column.getId());
+    });
+    agGridRef.current.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+  }, []);
 
   const handleSearch = (key) => {
     console.log(key)
     console.log(rowData)
     if (key !== '') {
-      // rowData.forEach(row=>console.log(row.location.includes(key)||row.name.includes(key)))
-      // setRowData(rowData.filter(row=>row.location.includes(key)||row.name.includes(key)))
       axios.get('http://localhost:5000/meeting-room')
         .then(res => {
           let result = res.data.data.filter(row => {
@@ -74,13 +101,6 @@ const MeetingRoom = () => {
     operateCellRenderer: OperateCellRenderer,
   };
 
-
-
-
-  // const rowData = [
-  //   { id: '1', name: '銷售組開會', where: 'A101' },
-  //   { id: '2', name: '企劃組開會', where: 'A102' },
-  // ];
   return (
     <div className="roomContainer">
       <h2>會議室</h2>
@@ -94,6 +114,7 @@ const MeetingRoom = () => {
       </div>
       <div className="ag-theme-alpine" style={{ height: '100vw', width: '80vw' }}>
         <AgGridReact
+          ref={agGridRef}
           rowData={rowData}
           columnDefs={columnDefs}
           rowSelection='multiple'//同時選擇多行

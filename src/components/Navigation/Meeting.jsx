@@ -56,7 +56,7 @@ const Meeting = () => {
     {
       headerName: '操作', field: 'operate', cellRenderer: (params) => (
         <div>
-          <Button onClick={() => navigate('/editMeeting',{state:params.data})} icon='configure' />
+          <Button onClick={() => navigate('/editMeeting', { state: params.data })} icon='configure' />
           <Button onClick={() => deleteHandler(params.data.id)} icon='trash' />
         </div>
       )
@@ -174,8 +174,8 @@ const Meeting = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-      <h2>會議清單</h2>
+    <div className='meetingContainer'>
+      <h2 style={{display:'block'}}>會議清單</h2>
       <div className='search'>
         <input
           type="text"
@@ -191,7 +191,7 @@ const Meeting = () => {
         />
         <button className='meetingb' onClick={handleSearch}>查詢</button>
       </div>
-      <div className='ag-theme-alpine center-table' style={{ height: '100vw', width: '100vw' }}>
+      <div className='ag-theme-alpine' style={{ height: '100vw', width: '80vw' }}>
         <AgGridReact
           ref={agGridRef}
           rowData={rowData}

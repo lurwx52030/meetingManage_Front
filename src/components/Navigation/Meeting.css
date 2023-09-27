@@ -1,36 +1,49 @@
 .search input[type="text"] {
-  background-color: #c8c4c4; /* 背景為灰色 */
-  padding: 5px; /* 調整內邊距 */
-  border: 1px solid #ccc; /* 添加邊框 */
-  border-radius: 3px; /* 圓角效果 */
+  background-color: #c8c4c4;
+  /* 背景為灰色 */
+  padding: 5px;
+  /* 調整內邊距 */
+  border: 1px solid #ccc;
+  /* 添加邊框 */
+  border-radius: 3px;
+  /* 圓角效果 */
+}
+
+.meetingContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 
 .search input[type="text"]:hover {
-  background-color: #e0e0e0; /* 當屬標停留在上面，變成淺灰色*/
+  background-color: #e0e0e0;
+  /* 當屬標停留在上面，變成淺灰色*/
 }
 
-.search {
-  margin-top: 100px;
+.search{
+  left: 0;
 }
 
 
-.wrenchicon{
+.wrenchicon {
   width: 30px;
   height: 30px;
 }
 
-.binicon{
+.binicon {
   width: 30px;
   height: 30px;
 }
 
 .button-container {
-  display: flex; 
-  gap: 10px; /*設定按鈕的間距*/
-} 
+  display: flex;
+  gap: 10px;
+  /*設定按鈕的間距*/
+}
 
-.calendaricon{
+.calendaricon {
   width: 30px;
   height: 30px;
 }
@@ -38,9 +51,9 @@
 .edit-button,
 .delete-button,
 .look-button {
-  background-color: transparent ;
-  border: none ;
-  cursor: pointer; 
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .ui.button {
@@ -48,12 +61,12 @@
   padding: 0;
 }
 
-img{
+img {
   margin: 0;
   padding: 0;
 }
 
-.meetingb{
+.meetingb {
   background-color: rgb(82, 80, 80);
   border: none;
   font-size: 19px;
@@ -62,8 +75,8 @@ img{
 }
 
 .load-button {
-  background-color: transparent ;
-  border: none ;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
   font-size: 30px;
 }

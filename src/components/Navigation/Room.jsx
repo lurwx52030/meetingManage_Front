@@ -92,7 +92,7 @@ const MeetingRoom = () => {
         />
         <button onClick={() => handleSearch(key)}>查詢</button>
       </div>
-      <div className="ag-theme-alpine center-table" style={{ height: '100vw', width: '100vw' }}>
+      <div className="ag-theme-alpine" style={{ height: '100vw', width: '80vw' }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}

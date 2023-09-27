@@ -20,11 +20,10 @@
 }
 
 .PeopleContainer{
-  width: 1300px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .user-table th {
@@ -52,10 +51,6 @@
   margin-top: 95px;
   margin-bottom: 10px;
   /* 增加底部間距 */
-}
-
-.center-table {
-  margin: auto;
 }
 
 .edit1-button,

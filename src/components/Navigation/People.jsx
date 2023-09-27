@@ -79,9 +79,7 @@ const People = ({ loginData, setLoginData }) => {
     }
   };
 
-
-  const [gridApi, setGridApi] = useState(null);
-  const [rowData, setRowData] = useState(null);
+  const [rowData, setRowData] = useState([]);
   const [key, setKey] = useState('')
   const url = 'http://localhost:5000/user'
 
@@ -99,13 +97,20 @@ const People = ({ loginData, setLoginData }) => {
         }
       })
         .then(resp => resp.json())
-
         .then(resp => {
-          setRowData(rowData.filter(item => item.id !== id));
-          alert('刪除成功');
+          switch (resp.status) {
+            case 200:
+              alert('刪除成功!');
+              setRowData(rowData.filter(row => row.id !== id))
+              break;
+            default:
+              return Promise.reject(resp);
+          }
+          console.log(resp);
         })
         .catch(error => {
-          console.error("刪除失敗", error);
+          console.log(error);
+          alert('刪除失敗');
         });
     }
 
@@ -117,8 +122,7 @@ const People = ({ loginData, setLoginData }) => {
   };
 
   const columnDefs = [
-    { headerName: '編號', field: 'id', filter: true, sortable: true, checkboxSelection: true },
-    { headerName: '員工編號', field: 'emid', filter: true, sortable: true },
+    { headerName: '員工編號', field: 'id', filter: true, sortable: true, checkboxSelection: true },
     { headerName: '帳號', field: 'account', filter: true, sortable: true },
     { headerName: '姓名', field: 'name', filter: true, sortable: true },
     {
@@ -158,23 +162,33 @@ const People = ({ loginData, setLoginData }) => {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
       }
-    }).then(resp => resp.json()).then(resp => {
-      console.log(resp)
-      switch (resp.statusCode) {
-        case 200:
-          setRowData(resp.data)
-          break;
-        case 401:
-          localStorage.removeItem("jwtToken")
-          localStorage.removeItem('userid')
-          alert("請重新登入！")
-          navigate("/")
-          setIsLogin(false)
-          break;
-        default:
-          break;
-      }
     })
+      .then(resp => resp.json())
+      .then(resp => {
+        switch (resp.status) {
+          case 200:
+            setRowData(resp.data)
+            break;
+          default:
+            return Promise.reject(resp);
+        }
+      })
+      .catch(e => {
+        console.log(e)
+        switch (e.statusCode) {
+          case 401:
+            localStorage.removeItem("jwtToken")
+            localStorage.removeItem('userid')
+            alert("請重新登入！")
+            navigate("/")
+            setIsLogin(false)
+            break;
+          case 403:
+            alert("未具權限！")
+            navigate("/");
+            break;
+        }
+      })
   }
 
   return (
@@ -188,7 +202,7 @@ const People = ({ loginData, setLoginData }) => {
         />
         <button onClick={handleSearch}>查詢</button>
       </div>
-      <div className="ag-theme-alpine center-table" style={{ height: '100vw', width: '100vw' }}>
+      <div className="ag-theme-alpine" style={{ height: '100vw', width: '80vw' }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}

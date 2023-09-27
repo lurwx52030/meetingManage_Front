@@ -27,23 +27,29 @@ const CreateMeeting = () => {
         })
             .then(res => res.json())
             .then(res => {
-                if (res.status) {
-                    if (res.status === 200) {
+                switch (res.status) {
+                    case 200:
                         setmeetingRooms(res.data);
-                    }
-                }
-
-                if (res.statusCode) {
-                    if (res.statusCode === 401) {
-                        alert("請重新登入！")
-                        localStorage.removeItem("jwtToken")
-                        localStorage.removeItem('userid')
-                        setIsLogin(false)
-                        navigate('/')
-                    }
+                        break;
+                    default:
+                        return Promise.reject(res)
                 }
             })
-            .catch(err => {
+            .catch(e => {
+                console.log(e)
+                switch (e.statusCode) {
+                    case 401:
+                        localStorage.removeItem("jwtToken")
+                        localStorage.removeItem('userid')
+                        alert("請重新登入！")
+                        navigate("/")
+                        setIsLogin(false)
+                        break;
+                    case 403:
+                        alert("未具權限！")
+                        navigate("/");
+                        break;
+                }
             })
     }, [])
 
@@ -84,8 +90,22 @@ const CreateMeeting = () => {
                         navigate('/meeting')
                         break;
                     default:
-                        console.log(res)
-                        alert(res.message)
+                        return Promise.reject(res)
+                }
+            })
+            .catch(e => {
+                console.log(e)
+                switch (e.statusCode) {
+                    case 401:
+                        localStorage.removeItem("jwtToken")
+                        localStorage.removeItem('userid')
+                        alert("請重新登入！")
+                        navigate("/")
+                        setIsLogin(false)
+                        break;
+                    case 403:
+                        alert("未具權限！")
+                        navigate("/");
                         break;
                 }
             })

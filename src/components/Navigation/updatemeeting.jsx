@@ -7,8 +7,8 @@ import './updatemeeting.css'; // 導入CSS
 // reference -> https://stackoverflow.com/questions/30166338/setting-value-of-datetime-local-from-date
 Date.prototype.toDatetimeLocalString = function () {
     // return new Date(this.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19)
-    this.setMinutes(this.getMinutes()-this.getTimezoneOffset())
-    return this.toISOString().slice(0,16)
+    this.setMinutes(this.getMinutes() - this.getTimezoneOffset())
+    return this.toISOString().slice(0, 16)
 }
 
 
@@ -56,20 +56,25 @@ const UpdateMeeting = () => {
         })
             .then(res => res.json())
             .then(res => {
-                if (res.status) {
-                    if (res.status === 200) {
+                switch (res.status) {
+                    case 200:
                         setmeetingRooms(res.data);
-                    }
+                        break;
+                    default:
+                        return Promise.reject(res);
                 }
-
-                if (res.statusCode) {
-                    if (res.statusCode === 401) {
+            }).catch(error => {
+                switch (error.statusCode) {
+                    case 401:
                         alert("請重新登入！")
                         localStorage.removeItem("jwtToken")
                         localStorage.removeItem('userid')
                         setIsLogin(false)
                         navigate('/')
-                    }
+                        break;
+                    default:
+                        alert(error.message)
+                        break;
                 }
             })
             .catch(err => {
@@ -78,15 +83,15 @@ const UpdateMeeting = () => {
 
 
     useEffect(() => {
-        if (announcement==='') {
+        if (announcement === '') {
             return
         }
 
         if (announcement !== 'Open') {
             setNotificationTime(0)
         }
-        console.log(announcement,notificationTime)
-    }, [announcement,notificationTime])
+        console.log(announcement, notificationTime)
+    }, [announcement, notificationTime])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -116,10 +121,11 @@ const UpdateMeeting = () => {
                         navigate('/meeting')
                         break;
                     default:
-                        console.log(res)
-                        alert(res.message)
-                        break;
+                        return Promise.reject(res);
                 }
+            })
+            .catch(error => {
+                alert(error.message)
             })
     }
 

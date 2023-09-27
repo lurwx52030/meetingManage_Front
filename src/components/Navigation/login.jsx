@@ -34,10 +34,12 @@ const Login = () => {
             console.log(isLogin);
             navigate('/');
             break;
-          default:
-            alert(res.message);
-            break;
+            default:
+              return Promise.reject(res);
         }
+      })
+      .catch(e => {
+        alert(e.message)
       })
   };
 

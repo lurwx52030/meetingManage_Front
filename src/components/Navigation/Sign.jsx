@@ -8,7 +8,7 @@ const Sign = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [Password2, setPassword2] = useState('');
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,8 +25,17 @@ const Sign = () => {
       })
         .then(res => res.json())
         .then(res => {
-          alert('註冊成功！')
-          navigate('/login')
+          switch (res.status) {
+            case 200:
+              alert('註冊成功！')
+              navigate('/login')
+              break;
+            default:
+              return Promise.reject(res);
+          }
+        })
+        .catch(error=>{
+          alert(error.message);
         })
     } else {
       alert("兩次密碼不一致！")

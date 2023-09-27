@@ -75,16 +75,11 @@ const Meeting = () => {
     resizable: true
   }
 
-  //回傳選取資料
-  const cellClickedListener = useCallback(event => {
-    console.log('cellClicked', event);
-  });
-
   const getRowId = useMemo(() => {
     return (params) => params.data.id;
   }, []);
 
-  // useeffect
+  
   useEffect(() => {
     window.addEventListener('resize', resizeUpdate)
     getMeetings()
@@ -196,11 +191,11 @@ const Meeting = () => {
           ref={agGridRef}
           rowData={rowData}
           columnDefs={columnDefs}
+          rowSelection='multiple'//同時選擇多行
+          animateRows={true} //整行式變動
           onGridReady={(event => {
             event.api.sizeColumnsToFit()
           })}
-          rowSelection='multiple'//同時選擇多行
-          animateRows={true} //整行式變動
         />
       </div>
       <div className="button-container">

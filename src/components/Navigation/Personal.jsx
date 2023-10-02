@@ -27,17 +27,20 @@ const Personal = () => {
           setAccount(data.account)
         }
       })
-  },[])
+  }, [])
 
 
   const handlechange = (e) => {
     e.preventDefault();
+
+    const data = {
+      account,
+      password
+    }
+  
     axios.put(
       `http://localhost:5000/user/account/${userid}`,
-      {
-        account,
-        password
-      },
+      data,
       {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
@@ -50,7 +53,7 @@ const Personal = () => {
         navigate("/login");
       })
       .catch((error) => {
-        alert("更新用戶 " + userid + " 時出現錯誤：" + error)
+        console.log(error)
       });
   }
 

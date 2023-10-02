@@ -173,7 +173,7 @@ const People = ({ loginData, setLoginData }) => {
             setIsLogin(false)
             break;
           case 403:
-            alert("未具權限！")
+            alert("您沒有權限！")
             navigate("/");
             break;
         }

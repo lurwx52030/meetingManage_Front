@@ -1,55 +1,3 @@
-// // import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         {/* <img src={logo} className="App-logo" alt="logo" /> */}
-//         {/* <p> */}
-//           {/* Edit <code>src/App.js</code> and save to reload. */}
-//         {/* </p> */}
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-// --------------------------------------------------------------------------------------
-// import React, { useState } from 'react';
-// import MeetingList from './components/MeetingList';
-// import CreateMeetingForm from './components/CreateMeetingForm';
-
-// const App = () => {
-//   const [meetings, setMeetings] = useState([]);
-
-//   const addMeeting = (meeting) => {
-//     setMeetings([...meetings, meeting]);
-//   };
-
-//   const deleteMeeting = (id) => {
-//     setMeetings(meetings.filter((meeting) => meeting.id !== id));
-//   };
-
-//   return (
-//     <div>
-//       <h1>Meeting Manager</h1>
-//       <CreateMeetingForm addMeeting={addMeeting} />
-//       <MeetingList meetings={meetings} deleteMeeting={deleteMeeting} />
-//     </div>
-//   );
-// };
-
-// export default App;
-
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Meeting from './components/Navigation/Meeting';
@@ -62,6 +10,7 @@ import Updateuser from './components/Navigation/Updateuser';
 import Createmeeting from './components/Navigation/createmeeting';
 import Home from './components/Navigation/home';
 import Login from './components/Navigation/login';
+import MeetingMember from './components/Navigation/meetingMember';
 import UpdateMeeting from './components/Navigation/updatemeeting';
 import { useIsLoginStore } from './store/useIsLoginStore';
 // import Roomdeatails from './components/Navigation/Roomdeatails'
@@ -85,6 +34,7 @@ const App = () => {
         <Route path='/editUser' element={<Updateuser />} />
         <Route path='/editMeeting' element={<UpdateMeeting />} />
         <Route path='/personal' element={<Personal />} />
+        <Route path='/member' element={<MeetingMember />} />
       </Routes>
     </Router>
   );

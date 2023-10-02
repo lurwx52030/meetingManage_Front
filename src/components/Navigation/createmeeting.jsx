@@ -11,7 +11,7 @@ const CreateMeeting = () => {
     const [end, setend] = useState('');
     const [meetingRoomId, setmeetingRoomId] = useState('');
     const [creatorId, setcreatorId] = useState(localStorage.getItem('userid'));
-    const [notificationTime, setnotificationTime] = useState(0);
+    const [notificationTime, setNotificationTime] = useState(0);
 
     const { isLogin, setIsLogin } = useIsLoginStore();
 
@@ -46,7 +46,7 @@ const CreateMeeting = () => {
                         setIsLogin(false)
                         break;
                     case 403:
-                        alert("未具權限！")
+                        alert("您沒有權限！")
                         navigate("/");
                         break;
                 }
@@ -104,8 +104,11 @@ const CreateMeeting = () => {
                         setIsLogin(false)
                         break;
                     case 403:
-                        alert("未具權限！")
+                        alert("您沒有權限！")
                         navigate("/");
+                        break;
+                    default:
+                        alert(e.message);
                         break;
                 }
             })
@@ -131,8 +134,13 @@ const CreateMeeting = () => {
                         <input type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
                         <label htmlFor='close'>關閉</label>
                         {announcement === 'Open' && (
-                            <select className="custom-select" id="shopSearchSelect">
-                                <option value={notificationTime} onChange={(e) => setnotificationTime(setnotificationTime(parseInt(e.target.value)))}>請選擇時間</option>
+                            <select
+                                className="custom-select"
+                                id="shopSearchSelect"
+                                value={notificationTime}
+                                onChange={(e) => setNotificationTime(parseInt(e.target.value))}
+                            >
+                                <option value="0">請選擇時間</option>
                                 <option value="5">5分鐘</option>
                                 <option value="10">10分鐘</option>
                                 <option value="15">15分鐘</option>

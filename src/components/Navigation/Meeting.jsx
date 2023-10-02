@@ -1,6 +1,6 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { AgGridReact } from 'ag-grid-react'; //記得install
+import { AgGridReact } from 'ag-grid-react';
 import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,11 +9,52 @@ import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './Meeting.css';
 
 
-//查詢
+
 const Meeting = () => {
 
   // 查詢，使用 searchKeyword 和 selectedDate 進行篩選
   const handleSearch = () => {
+    if (key !== '') {
+      axios.get('http://localhost:5000/meeting',
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+          }
+
+        }
+      )
+        .then(res => {
+          let result = res.data.data.filter(row => {
+            return (
+              row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase()) ||
+              row.meetingRoom.toLowerCase().includes(key.toLowerCase())
+            );
+          })
+
+          setRowData(result);
+        });
+    } else if (key === '') {
+      axios.get('http://localhost:5000/meeting', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+        }
+      })
+        .then(res => {
+          let result = res.data.data;
+
+          if (selectedDate) {
+            result = result.filter(row => {
+              const startDate = new Date(row.start);
+              const endDate = new Date(row.end);
+              const selectedDateTime = new Date(selectedDate).getTime();
+              return startDate.getTime() <= selectedDateTime && endDate.getTime() >= selectedDateTime;
+              //篩選時間範圍(等於或大於開始時間及等於或小於結束時間)
+            });
+          }
+
+          setRowData(result);
+        });
+    }
   };
 
   //表格
@@ -58,6 +99,7 @@ const Meeting = () => {
         <div>
           <Button onClick={() => navigate('/editMeeting', { state: params.data })} icon='configure' />
           <Button onClick={() => deleteHandler(params.data.id)} icon='trash' />
+          <Button onClick={() => navigate('/member', { state: params.data })} icon='users' />
         </div>
       )
     },
@@ -79,7 +121,7 @@ const Meeting = () => {
     return (params) => params.data.id;
   }, []);
 
-  
+
   useEffect(() => {
     window.addEventListener('resize', resizeUpdate)
     getMeetings()
@@ -122,12 +164,21 @@ const Meeting = () => {
     }).then(res => {
       setRowData(res.data.data)
     }).catch(err => {
-      if (err.response.status === 401) {
+      switch (err.response.status) {
+        case 401:
         alert("請重新登入！")
         localStorage.removeItem("jwtToken")
         localStorage.removeItem('userid')
         setIsLogin(false)
         navigate('/')
+          break;
+        case 403:
+        alert("您沒有權限！")
+        navigate('/')
+          break;
+        default:
+          alert(err.response.data.message)
+          break;
       }
     })
   }
@@ -170,7 +221,7 @@ const Meeting = () => {
 
   return (
     <div className='meetingContainer'>
-      <h2 style={{display:'block'}}>會議清單</h2>
+      <h2 style={{ display: 'block' }}>會議清單</h2>
       <div className='search'>
         <input
           type="text"

@@ -10,7 +10,29 @@ import { useIsLoginStore } from '../../store/useIsLoginStore';
 function MeetingFile() {
     // 查詢
     const handleSearch = () => {
-
+        if (key !== '') {
+            axios.get(`http://localhost:5000/meeting-file/${location.state.id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+                    }
+                }
+            )
+                .then(res => {
+                    let result = res.data.data.filter(row => row.name.toLowerCase().includes(key.toLowerCase()));
+                    setFiles(result);
+                });
+        } else if (key === '') {
+            axios.get(`http://localhost:5000/meeting-file/${location.state.id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+                }
+            })
+                .then(res => {
+                    let result = res.data.data;
+                    setFiles(result);
+                });
+        }
     };
 
     //表格

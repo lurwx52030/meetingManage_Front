@@ -10,6 +10,7 @@ import Updateuser from './components/Navigation/Updateuser';
 import Createmeeting from './components/Navigation/createmeeting';
 import Home from './components/Navigation/home';
 import Login from './components/Navigation/login';
+import MeetingFile from './components/Navigation/meetingFile';
 import MeetingMember from './components/Navigation/meetingMember';
 import UpdateMeeting from './components/Navigation/updatemeeting';
 import { useIsLoginStore } from './store/useIsLoginStore';
@@ -35,6 +36,7 @@ const App = () => {
         <Route path='/editMeeting' element={<UpdateMeeting />} />
         <Route path='/personal' element={<Personal />} />
         <Route path='/member' element={<MeetingMember />} />
+        <Route path='/file' element={<MeetingFile />} />
       </Routes>
     </Router>
   );

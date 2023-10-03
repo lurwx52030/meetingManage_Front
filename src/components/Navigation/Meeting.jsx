@@ -76,45 +76,44 @@ const Meeting = () => {
     { headerName: '會議名稱', field: 'name', filter: true, sortable: true },
     {
       headerName: '開始時間', field: 'start', filter: true, sortable: true,
-      cellRenderer: (params) => {
-        return <div>{new Date(params.data.start).toLocaleString()}</div>
-      }
+      valueFormatter: (params) => new Date(params.data.start).toLocaleString()
     },
     {
       headerName: '結束時間', field: 'end', filter: true, sortable: true,
-      cellRenderer: (params) => {
-        return <div>{new Date(params.data.end).toLocaleString()}</div>
-      }
+      valueFormatter: (params) => new Date(params.data.end).toLocaleString()
     },
     { headerName: '地點', field: 'meetingRoom', filter: true },
     {
       headerName: '簽到簽退',
       field: 'signinout',
+      filter: true,
+      sortable: true,
       cellRenderer: (params) => (
         <Button onClick={() => handleLook(params.data.name)} icon='calendar check' />
       ),
     },
     {
-      headerName: '操作', field: 'operate', cellRenderer: (params) => (
-        <div>
+      headerName: '操作', field: 'operate', filter: true, sortable: true,
+      cellRenderer: (params) => (
+        <>
           <Button onClick={() => navigate('/editMeeting', { state: params.data })} icon='configure' />
           <Button onClick={() => deleteHandler(params.data.id)} icon='trash' />
           <Button onClick={() => navigate('/member', { state: params.data })} icon='users' />
-        </div>
+        </>
       )
     },
     {
-      headerName: '檔案管理', field: 'file', cellRenderer: (params) => (
-        <div className="button-container">
-          <Button onClick={() => handleUpload(params.data.id)} icon='file' />
-        </div>
+      headerName: '檔案管理', field: 'file', filter: true, sortable: true,
+      cellRenderer: (params) => (
+        <Button onClick={() => navigate('/file', { state: params.data })} icon='file' />
       )
     }
   ]);
   //對格子統一調整
   const defaultColDef = {
     flex: 1,
-    resizable: true
+    resizable: true,
+    cellStyle: { display: 'flex', justifyContent: 'start', alignItems: 'center' },
   }
 
   const getRowId = useMemo(() => {
@@ -150,12 +149,6 @@ const Meeting = () => {
     agGridRef.current.columnApi.autoSizeColumns(allColumnIds, skipHeader);
   }, []);
 
-
-  //上傳檔案
-  const handleUpload = (id) => {
-    console.log(id)
-  }
-
   const getMeetings = () => {
     axios.get(url, {
       headers: {
@@ -166,15 +159,15 @@ const Meeting = () => {
     }).catch(err => {
       switch (err.response.status) {
         case 401:
-        alert("請重新登入！")
-        localStorage.removeItem("jwtToken")
-        localStorage.removeItem('userid')
-        setIsLogin(false)
-        navigate('/')
+          alert("請重新登入！")
+          localStorage.removeItem("jwtToken")
+          localStorage.removeItem('userid')
+          setIsLogin(false)
+          navigate('/')
           break;
         case 403:
-        alert("您沒有權限！")
-        navigate('/')
+          alert("您沒有權限！")
+          navigate('/')
           break;
         default:
           alert(err.response.data.message)
@@ -242,6 +235,7 @@ const Meeting = () => {
           ref={agGridRef}
           rowData={rowData}
           columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
           rowSelection='multiple'//同時選擇多行
           animateRows={true} //整行式變動
           onGridReady={(event => {

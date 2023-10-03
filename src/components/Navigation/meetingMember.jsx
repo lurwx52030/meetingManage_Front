@@ -48,7 +48,6 @@ function MeetingMember() {
     const [selectEmployee, setSelectEmployee] = useState('');
     const [key, setKey] = useState('');
     const agGridRef = useRef()
-    const url = ' http://localhost:5000/meeting';
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -228,8 +227,8 @@ function MeetingMember() {
                 <button
                     style={{ marginLeft: '5px' }}
                     className='meetingb'
-                    onClick={handleSearch
-                    }>
+                    onClick={handleSearch}
+                >
                     查詢
                 </button>
                 <div style={{ marginTop: '10px' }}>

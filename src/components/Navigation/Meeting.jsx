@@ -47,8 +47,19 @@ const Meeting = () => {
               const startDate = new Date(row.start);
               const endDate = new Date(row.end);
               const selectedDateTime = new Date(selectedDate).getTime();
-              return startDate.getTime() <= selectedDateTime && endDate.getTime() >= selectedDateTime;
-              //篩選時間範圍(等於或大於開始時間及等於或小於結束時間)
+
+              // 計算開始時間前30分
+              const startTimeMinus30Minutes = new Date(startDate);
+              startTimeMinus30Minutes.setMinutes(startTimeMinus30Minutes.getMinutes() - 30);
+
+              // 計算結束後時間30分
+              const endTimePlus30Minutes = new Date(endDate);
+              endTimePlus30Minutes.setMinutes(endTimePlus30Minutes.getMinutes() + 30);
+
+              return (
+                selectedDateTime >= startTimeMinus30Minutes.getTime() &&
+                selectedDateTime <= endTimePlus30Minutes.getTime()
+              );
             });
           }
 

@@ -3,6 +3,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { BsFillCloudArrowUpFill } from "react-icons/bs";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
@@ -118,6 +119,10 @@ function MeetingFile() {
         const body = new FormData();
         if (uploadFiles) {
             console.log(uploadFiles);
+            if (uploadFiles.length === 0) {
+                alert('請選擇一個檔案');
+                return;
+            }
             [...uploadFiles].forEach((file, i) => {
                 body.append('file', file, file.name)
             });
@@ -249,7 +254,15 @@ function MeetingFile() {
                             className='meetingb'
                             type='submit'
                         >
+                            <BsFillCloudArrowUpFill />
                             上傳
+                        </button>
+                        <button
+                            style={{ marginLeft: '5px' }}
+                            className='meetingb'
+                            onClick={() => { navigate('/meeting') }}
+                        >
+                            返回
                         </button>
                     </div>
                 </form>

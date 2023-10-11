@@ -13,14 +13,10 @@ import MeetingRoom from './pages/room/room';
 import Sign from './pages/sign/sign';
 import UpdateMeeting from './pages/updateMeeting/updateMeeting';
 import Updateuser from './pages/updateUser/updateUser';
-import { useIsLoginStore } from './store/useIsLoginStore';
 
 
 
 const App = () => {
-
-  const { isLogin, setIsLogin } = useIsLoginStore()
-
   return (
     <Router>
       <Navigation />

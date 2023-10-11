@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
-import './Meeting.css';
+import './meeting.css';
 
 
 

@@ -3,7 +3,7 @@
     filter: brightness(0.7); /* 設置亮度，0是完全黑暗，1是原始亮度 */
     position: relative; 
     z-index: -1;
-    background-image: url('../../image/home.jpg');
+    background-image: url('../../assets/home.jpg');
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -33,7 +33,7 @@
   bottom: 285px; /* 底部位置 */
   right: -185px; /* 靠右 */
   z-index: 2; /* 圖片的第二層 */
-  background-image: url('../../image/Line.jpg'); 
+  background-image: url('../../assets/Line.jpg'); 
   width: 35%; 
   height: 75%; 
   transform: scale(0.25); /* 圖片的縮小比例 */

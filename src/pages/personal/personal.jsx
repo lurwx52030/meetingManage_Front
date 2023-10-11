@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Personal.css'; // 導入CSS
+import './personal.css'; // 導入CSS
 
 const Personal = () => {
   const [account, setAccount] = useState('');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Sign.css'; // 導入CSS
+import './sign.css'; // 導入CSS
 
 const Sign = () => {
   const [name, setName] = useState('');

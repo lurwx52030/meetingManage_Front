@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import './Updateuser.css'; // 導入CSS
+import './updateUser.css'; // 導入CSS
 
 
 const Updateuser = () => {

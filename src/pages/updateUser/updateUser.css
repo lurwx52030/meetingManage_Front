@@ -1,9 +1,16 @@
+.update-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-top: 20px;
-  
 }
 
 input[type="text"],
@@ -22,18 +29,24 @@ input[type="password"] {
 
 .row {
   display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  right: 25px;
+  
 }
 
 .row label {
   font-size: 19px;
+  margin-bottom: 20px;
+  width: 100px;
 }
 
-.row input[type=text], input[type=password]{
-  margin: 5px;
-}
-
-.row b{
-  font-size: 19px;
+.row input[type="text"] {
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 h2 {
@@ -49,20 +62,10 @@ h2 {
   justify-content: space-between;
   width: 200px; 
   margin-top: 40px;
-  position: relative;
-  right: 26px;
   align-items: center;
 }
 
 .buttons button {
-  background-color: aliceblue;
-  border: none;
-  font-size: 19px;
-  border-radius: 5px;
-  color: #0a0a0a;
-}
-
-.buttons input[type=submit] {
   background-color: aliceblue;
   border: none;
   font-size: 19px;

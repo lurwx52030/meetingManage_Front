@@ -60,8 +60,6 @@
     display: flex;
     width: 200px; 
     margin-top: 40px;
-    position: relative;
-    left: 45px;
     align-items: center;
   }
   

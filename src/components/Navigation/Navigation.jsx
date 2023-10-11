@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Dropdown } from 'semantic-ui-react';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
-import './Navigation.css';
+import './navigation.css';
 
 const Navigation = () => {
   const { isLogin, setIsLogin } = useIsLoginStore();

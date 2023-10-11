@@ -1,20 +1,20 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import Meeting from './components/Navigation/Meeting';
-import Navigation from './components/Navigation/Navigation';
-import People from './components/Navigation/People';
-import Personal from './components/Navigation/Personal';
-import MeetingRoom from './components/Navigation/Room';
-import Sign from './components/Navigation/Sign';
-import Updateuser from './components/Navigation/Updateuser';
-import Createmeeting from './components/Navigation/createmeeting';
-import Home from './components/Navigation/home';
-import Login from './components/Navigation/login';
-import MeetingFile from './components/Navigation/meetingFile';
-import MeetingMember from './components/Navigation/meetingMember';
-import UpdateMeeting from './components/Navigation/updatemeeting';
+import Navigation from './components/navigation/navigation';
+import Createmeeting from './pages/createMeeting/createMeeting';
+import Home from './pages/home/home';
+import Login from './pages/login/login';
+import Meeting from './pages/meeting/meeting';
+import MeetingFile from './pages/meetingFile/meetingFile';
+import MeetingMember from './pages/meetingMember/meetingMember';
+import People from './pages/people/people';
+import Personal from './pages/personal/personal';
+import MeetingRoom from './pages/room/room';
+import Sign from './pages/sign/sign';
+import UpdateMeeting from './pages/updateMeeting/updateMeeting';
+import Updateuser from './pages/updateUser/updateUser';
 import { useIsLoginStore } from './store/useIsLoginStore';
-// import Roomdeatails from './components/Navigation/Roomdeatails'
+
 
 
 const App = () => {

@@ -34,8 +34,8 @@ const Login = () => {
             console.log(isLogin);
             navigate('/');
             break;
-            default:
-              return Promise.reject(res);
+          default:
+            return Promise.reject(res);
         }
       })
       .catch(e => {
@@ -44,10 +44,10 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="root-container ">
       <h2>會員登入</h2>
       <form className="form-container" onSubmit={handleSubmit}>
-        <div className='row'>
+        <div className='loginContainer'>
           <div>
             <b>帳號</b>
             <input type="text" value={account} onChange={(e) => setAccount(e.target.value)} />
@@ -56,14 +56,13 @@ const Login = () => {
             <b>密碼</b>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
-        </div>
 
-        <div className='buttons'>
-          <input type="submit" value="登入" />
-          <button onClick={() => navigate('/Sign')} >註冊會員</button>
-          {/* <button type="sign" onClick={() => navigate('/Sign')}><b>註冊會員</b></button> */}
+          <div className='buttons'>
+            <input type="submit" value="登入" />
+            <button onClick={() => navigate('/Sign')} >註冊會員</button>
+            {/* <button type="sign" onClick={() => navigate('/Sign')}><b>註冊會員</b></button> */}
+          </div>
         </div>
-
       </form>
     </div>
   );

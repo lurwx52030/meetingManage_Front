@@ -4,10 +4,10 @@ import { AgGridReact } from 'ag-grid-react';
 import axios from "axios";
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import binicon from '../../image/bin.png';
-import wrenchicon from '../../image/wrench.png';
+import binicon from '../../assets/bin.png';
+import wrenchicon from '../../assets/wrench.png';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
-import './People.css';
+import './people.css';
 
 const OperateCellRenderer = (params) => {
   const handleEditClick = () => {

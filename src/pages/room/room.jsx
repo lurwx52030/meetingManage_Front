@@ -8,19 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './room.css';
 
-
-const OperateCellRenderer = (params) => {
-  const handleLook = () => {
-    // 查看按鈕事件
-    console.log('查看', params.data);
-  };
-  return (
-    <div className="button-container">
-      <button className="look2-button" onClick={() => handleLook(params.meetingid)}><BsWindowStack /></button>
-    </div>
-  );
-};
-
 const MeetingRoom = () => {
 
   const [rowData, setRowData] = useState([])
@@ -112,12 +99,23 @@ const MeetingRoom = () => {
     { headerName: '編號', field: 'id', filter: true, sortable: true, checkboxSelection: true },
     { headerName: '會議室名稱', field: 'name', filter: true, sortable: true },
     { headerName: '地點', field: 'location', filter: true, sortable: true },
-    { headerName: '操作', field: 'operate', cellRenderer: OperateCellRenderer }
+    {
+      headerName: '操作', field: 'operate', cellRenderer: (params) => {
+        return (
+          <div className="button-container">
+            <button
+              className="look2-button"
+              onClick={() => {
+                navigate('/roomdeatails', { state: params.data })
+              }}
+            >
+              <BsWindowStack />
+            </button>
+          </div>
+        )
+      }
+    }
   ];
-
-  const frameworkComponents = {
-    operateCellRenderer: OperateCellRenderer,
-  };
 
   return (
     <div className="roomContainer">
@@ -137,7 +135,6 @@ const MeetingRoom = () => {
           columnDefs={columnDefs}
           rowSelection='multiple'//同時選擇多行
           animateRows={true} //整行式變動
-          frameworkComponents={frameworkComponents}
           onGridReady={(event => {
             event.api.sizeColumnsToFit()
           })}

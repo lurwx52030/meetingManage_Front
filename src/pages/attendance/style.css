@@ -1,0 +1,51 @@
+.signin-button,
+.signout-button,
+.nosignin-button,
+.nosignout-button,
+.marker-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 27px;
+
+}
+
+.sinsout-container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+    justify-content: center;  */
+  height: 100vh;
+}
+
+.search-sinsout input[type="text"]:hover {
+  background-color: #e0e0e0;
+  /* 當屬標停留在上面，變成淺灰色*/
+}
+
+.search-sinsout {
+  position: relative;
+  left: 250px;
+  width: 70%;
+  /* 寬度調整 */
+  margin-top: 100px;
+}
+
+.search-sinsout input[type="text"] {
+  background-color: #c8c4c4;
+  /* 背景為灰色 */
+  padding: 5px;
+  /* 調整內邊距 */
+  border: 1px solid #ccc;
+  /* 添加邊框 */
+  border-radius: 3px;
+  /* 圓角效果 */
+}
+
+.sinsoutb {
+  background-color: rgb(82, 80, 80);
+  border: none;
+  font-size: 19px;
+  color: #ffffff;
+  cursor: pointer;
+}

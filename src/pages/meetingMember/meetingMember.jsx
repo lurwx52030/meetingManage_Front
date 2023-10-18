@@ -109,6 +109,10 @@ function MeetingMember() {
 
 
     const handleAdd = () => {
+        console.log({
+            meetingId: location.state.id,
+            employeeId: selectEmployee
+        })
         axios.post(`http://localhost:5000/meeting-member`, {
             meetingId: location.state.id,
             employeeId: selectEmployee
@@ -249,6 +253,17 @@ function MeetingMember() {
                         onClick={handleAdd}
                     >
                         新增
+                    </button>
+
+
+                    <button
+                        style={{ marginLeft: '5px' }}
+                        className='sinsoutb'
+                        onClick={() => {
+                            navigate('/meeting')
+                        }}
+                    >
+                        返回
                     </button>
                 </div>
             </div>

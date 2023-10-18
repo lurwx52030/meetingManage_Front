@@ -100,7 +100,7 @@ const Meeting = () => {
       filter: true,
       sortable: true,
       cellRenderer: (params) => (
-        <Button onClick={() => handleLook(params.data.name)} icon='calendar check' />
+        <Button onClick={() => navigate('/attendance', { state: params.data })} icon='calendar check' />
       ),
     },
     {

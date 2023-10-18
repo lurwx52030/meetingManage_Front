@@ -23,7 +23,7 @@ const Login = () => {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res)
+        // console.log(res)
         switch (res.status) {
           case 200:
             //save token

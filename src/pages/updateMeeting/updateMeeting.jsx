@@ -74,6 +74,7 @@ const UpdateMeeting = () => {
                         break;
                     default:
                         alert(error.message)
+                        navigate('/meeting')
                         break;
                 }
             })

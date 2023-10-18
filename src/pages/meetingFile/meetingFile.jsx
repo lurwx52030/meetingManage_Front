@@ -152,15 +152,19 @@ function MeetingFile() {
                     console.log(e)
                     switch (e.statusCode) {
                         case 401:
-                            localStorage.removeItem("jwtToken")
-                            localStorage.removeItem('userid')
-                            alert("請重新登入！")
-                            navigate("/")
-                            setIsLogin(false)
+                            localStorage.removeItem("jwtToken");
+                            localStorage.removeItem('userid');
+                            alert("請重新登入！");
+                            navigate("/");
+                            setIsLogin(false);
                             break;
                         case 403:
-                            alert("您沒有權限！")
+                            alert("您沒有權限！");
                             navigate("/");
+                            break;
+                        default:
+                            alert(e.message);
+                            navigate('/meeting');
                             break;
                     }
                 })

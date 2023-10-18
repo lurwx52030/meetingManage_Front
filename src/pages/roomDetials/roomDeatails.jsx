@@ -69,20 +69,6 @@ const Roomdeatails = () => {
             })
     }, [])
 
-    const columnDefs = [
-        { headerName: '會議ID', field: 'id', filter: true },
-        {
-            headerName: '開始時間', field: `start`, valueFormatter: function (params) {
-                return new Date(params.value).toLocaleString();
-            }, filter: true
-        },
-        {
-            headerName: '結束時間', field: 'end', valueFormatter: function (params) {
-                return new Date(params.value).toLocaleString();
-            }, filter: true
-        }
-    ]
-
     //自適應大小
     const onGridReady = (params) => {
         params.api.sizeColumnsToFit();
@@ -95,20 +81,20 @@ const Roomdeatails = () => {
             style={{ height: '100vh' }}
         >
             <h2>會議室借用狀況-{location.state.name}</h2>
-            {/* <div className="search">
-                <input
-                    type="text"
-                    placeholder="...搜尋"
-                    onChange={(e) => setKey(e.target.value)}
-                />
-                <button onClick={() => handleSearch(key)}>查詢</button>
-            </div> */}
-            <div style={{ height: "80%", width: '100%' }}>
+            <div style={{ height: "80%", width: '80%' }}>
                 <Calendar
                     localizer={dayjsLocalizer(dayjs)}
                     events={meetingRooms}
+                    eventPropGetter={(event, start, end, isSelected) => {
+                        let current = new Date()
+                        console.log(start)
+                        console.log(current < start)
+                        console.log(current > start && current < end)
+                        console.log(current > start)
+                    }}
                     startAccessor='start'
                     endAccessor='end'
+                    defaultView='week'
                 />
             </div>
         </div>

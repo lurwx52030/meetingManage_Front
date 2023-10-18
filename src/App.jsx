@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Navigation from './components/navigation/navigation';
+import Attendance from './pages/attendance';
 import Createmeeting from './pages/createMeeting/createMeeting';
 import Home from './pages/home/home';
 import Login from './pages/login/login';
@@ -26,16 +27,17 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Sign" element={<Sign />} />
-          <Route path="/Createmeeting" element={<Createmeeting />} />
           <Route path="/meeting" element={<Meeting />} />
+          <Route path="/Createmeeting" element={<Createmeeting />} />
+          <Route path='/editMeeting' element={<UpdateMeeting />} />
+          <Route path='/file' element={<MeetingFile />} />
+          <Route path='/member' element={<MeetingMember />} />
+          <Route path='/attendance' element={<Attendance />} />
           <Route path="/meetingRoom" element={<MeetingRoom />} />
+          <Route path='/roomdeatails' element={<Roomdeatails />} />
           <Route path="/People" element={<People />} />
           <Route path='/editUser' element={<Updateuser />} />
-          <Route path='/editMeeting' element={<UpdateMeeting />} />
           <Route path='/personal' element={<Personal />} />
-          <Route path='/member' element={<MeetingMember />} />
-          <Route path='/file' element={<MeetingFile />} />
-          <Route path='/roomdeatails' element={<Roomdeatails />} />
         </Routes>
       </div>
     </Router>

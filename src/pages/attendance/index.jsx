@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AiOutlineCheckSquare, AiOutlineFrown } from "react-icons/ai";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import { RemarkModal } from '../../components/modals/RemarkModal';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './style.css';
 
@@ -73,13 +74,11 @@ function Attendance() {
                 </div>
             )
         },
-        // {
-        //     headerName: '備註', field: 'operate', cellRenderer: (params) => (
-        //         <div>
-        //             <Button className='marker-button' onClick={() => signin(params.data.id)}  ><BsFillChatLeftTextFill /></Button>
-        //         </div>
-        //     )
-        // },
+        {
+            headerName: '備註', field: 'operate', cellRenderer: (params) => {
+                return (<RemarkModal meeting={params.data} />)
+            }
+        },
     ]);
 
     //對格子統一調整
@@ -254,7 +253,6 @@ function Attendance() {
                     rowSelection='multiple'//同時選擇多行
                     animateRows={true} //整行式變動
                     onGridReady={onGridReady}
-
                 />
             </div>
             <div className="button-container">

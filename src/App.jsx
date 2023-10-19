@@ -11,7 +11,7 @@ import MeetingMember from './pages/meetingMember/meetingMember';
 import People from './pages/people/people';
 import Personal from './pages/personal/personal';
 import MeetingRoom from './pages/room/room';
-import Roomdeatails from './pages/roomDetials/Roomdeatails';
+import RoomDetails from './pages/roomDetails/roomDetails';
 import Sign from './pages/sign/sign';
 import UpdateMeeting from './pages/updateMeeting/updateMeeting';
 import Updateuser from './pages/updateUser/updateUser';
@@ -34,7 +34,7 @@ const App = () => {
           <Route path='/member' element={<MeetingMember />} />
           <Route path='/attendance' element={<Attendance />} />
           <Route path="/meetingRoom" element={<MeetingRoom />} />
-          <Route path='/roomdeatails' element={<Roomdeatails />} />
+          <Route path='/roomDetails' element={<RoomDetails />} />
           <Route path="/People" element={<People />} />
           <Route path='/editUser' element={<Updateuser />} />
           <Route path='/personal' element={<Personal />} />

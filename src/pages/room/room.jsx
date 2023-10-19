@@ -106,7 +106,7 @@ const MeetingRoom = () => {
             <button
               className="look2-button"
               onClick={() => {
-                navigate('/roomdeatails', { state: params.data })
+                navigate('/roomDetails', { state: params.data })
               }}
             >
               <BsWindowStack />

@@ -285,7 +285,26 @@ function Attendance() {
             }
         })
     }
-    const checkoutHandler = () => { }
+    const checkoutHandler = (id) => {
+        axios.get(`http://localhost:5000/meeting-member/signout/${location.state.id}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+            }
+        }).then(res => {
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
+            if (err.response.status === 401) {
+                alert("請重新登入！")
+                localStorage.removeItem("jwtToken")
+                localStorage.removeItem('userid')
+                setIsLogin(false)
+                navigate('/login')
+            } else {
+                alert(err.response.data.message)
+            }
+        })
+    }
 
     //自適應大小
     const onGridReady = (params) => {

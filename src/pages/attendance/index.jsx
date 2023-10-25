@@ -53,12 +53,9 @@ function Attendance() {
     const agGridRef = useRef();
     const [checkin, setCheckin] = useState(false);
     const [checkout, setCheckout] = useState(false);
-
     const navigate = useNavigate();
     const location = useLocation();
-
     const [size, setSize] = useState([0, 0]);
-
     const { isLogin, setIsLogin } = useIsLoginStore();
 
     const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
@@ -67,9 +64,21 @@ function Attendance() {
         {
             headerName: '簽到/簽退', field: 'operate', cellRenderer: (params) => (
                 <div>
-                    <Button className='signin-button' onClick={() => checkinHandler(params.data.id)}  ><AiOutlineCheckSquare /></Button>
+                    <Button
+                        className='signin-button'
+                        style={{ backgroundColor: params.data.singin !== null ? '#42f55d' : '#e0e1e2 none' }}
+                        onClick={() => checkinHandler(params.data.id)}
+                    >
+                        <AiOutlineCheckSquare />
+                    </Button>
                     {/* <Button className='signout-button' onClick={() => signout(params.data.id)}  ><AiOutlineCheckSquare /></Button> */}
-                    <Button className='nosignin-button' onClick={() => checkoutHandler(params.data.id)}  ><AiOutlineFrown /></Button>
+                    <Button
+                        className='nosignin-button'
+                        style={{ backgroundColor: params.data.singout !== null ? '#42f55d' : '#e0e1e2 none' }}
+                        onClick={() => checkoutHandler(params.data.id)}
+                    >
+                        <AiOutlineFrown />
+                    </Button>
                     {/* <Button className='nosignout-button' onClick={() => nosignout(params.data.id)}  ><AiOutlineCloseSquare /></Button> */}
                 </div>
             )
@@ -94,17 +103,83 @@ function Attendance() {
 
     useEffect(() => {
         window.addEventListener('resize', resizeUpdate)
-        getMembers()
-        getAttendanceState()
+        getMembers();
+        getAttendanceState();
+        // sleep 100ms
+        (() => new Promise(resolve => setTimeout(resolve, 100)))()
         return () => {
             // remove Listener when component destroy
             window.removeEventListener('resize', resizeUpdate);
         }
     }, [])
 
+    useEffect(() => {
+        console.log(checkin, checkout)
+
+        if (checkin || checkout) {
+            realTimeAttendanceState()
+        }
+    }, [checkin, checkout])
+
+    const resetState = (socket, counter) => {
+        counter = 0;
+        if (checkin) {
+            setCheckin(!checkin)
+        } else if (checkout) {
+            setCheckout(!checkout)
+        }
+        socket.close();
+
+        return [counter];
+    }
+
     const resizeUpdate = () => {
         autoSizeAll()
         sizeToFit()
+    }
+
+    const realTimeAttendanceState = () => {
+        console.log(location.state.id);
+        const socket = new WebSocket('ws://localhost:5000');
+        let x;
+        socket.onopen = function (e) {
+            console.log("[open] Connection established");
+            console.log("Sending to server");
+
+            socket.send(JSON.stringify({
+                event: 'hello',
+                data: location.state.id
+            }))
+
+            let counter = 0;
+            x = setInterval(() => {
+                socket.send(JSON.stringify({
+                    event: 'member',
+                    data: location.state.id
+                }))
+                console.log(counter, new Date());
+                console.log(checkin, checkout)
+                if (counter === 60 * location.state.checkLimit) {
+                    clearInterval(x);
+                    counter = 0;
+                }
+                counter++;
+            }, 1000);
+        };
+
+        socket.onmessage = function (event) {
+            const res = JSON.parse(event.data);
+            console.log(res);
+            if (res !== null && res !== undefined) {
+                if (res.data instanceof Array) {
+                    setMembers(res.data);
+                }
+            }
+        }
+
+        socket.onclose = function () {
+            console.log('簽到簽退結束')
+        }
     }
 
 
@@ -146,12 +221,12 @@ function Attendance() {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
                 }
-
             }
         ).then(res => {
             const data = res.data.data
             setCheckin(data[0].isCheckin)
             setCheckout(data[0].isCheckout)
+            console.log(data[0].isCheckin, data[0].isCheckout)
         }).catch(err => {
             console.log(err)
             if (err.response.status === 401) {
@@ -170,11 +245,12 @@ function Attendance() {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
         }).then(res => {
-            console.log(res.data)
+            console.log(res.data.msg)
+
             if (type === 'checkin') {
-                setCheckin(!state)
+                setCheckin(res.data.msg.includes("開啟") ? true : false)
             } else if (type === 'checkout') {
-                setCheckout(!state)
+                setCheckout(res.data.msg.includes("開啟") ? true : false)
             }
         }).catch(err => {
             if (err.response.status === 401) {
@@ -189,7 +265,26 @@ function Attendance() {
         })
     }
 
-    const checkinHandler = () => { }
+    const checkinHandler = (id) => {
+        axios.get(`http://localhost:5000/meeting-member/signin/${location.state.id}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+            }
+        }).then(res => {
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
+            if (err.response.status === 401) {
+                alert("請重新登入！")
+                localStorage.removeItem("jwtToken")
+                localStorage.removeItem('userid')
+                setIsLogin(false)
+                navigate('/login')
+            } else {
+                alert(err.response.data.message)
+            }
+        })
+    }
     const checkoutHandler = () => { }
 
     //自適應大小
@@ -231,6 +326,7 @@ function Attendance() {
                         onClick={() => {
                             attendanceStateHandler('checkin', location.state.id, checkin)
                         }}
+                        disabled={checkout}
                     >
                         開啟/關閉簽到
                     </button>
@@ -240,6 +336,7 @@ function Attendance() {
                         onClick={() => {
                             attendanceStateHandler('checkout', location.state.id, checkout)
                         }}
+                        disabled={checkin}
                     >
                         開啟/關閉簽退
                     </button>

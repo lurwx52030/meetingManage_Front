@@ -7,6 +7,7 @@ import {
     Calendar, dayjsLocalizer
 } from 'react-big-calendar';
 import { useLocation, useNavigate } from "react-router-dom";
+import { RoomStateMessage } from '../../components/roomStateMessage';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './roomDetails.css';
 
@@ -86,46 +87,53 @@ const RoomDetails = () => {
             style={{ height: '100vh' }}
         >
             <h2>會議室借用狀況-{location.state.name}</h2>
-            <div style={{ height: "80%", width: '80%' }}>
-                <Calendar
-                    localizer={dayjsLocalizer(dayjs)}
-                    events={meetingRooms}
-                    components={{
-                        day: true,
-                        week: true,
-                        year: true,
-                        event: ({ event }) => {
-                            const { title, start, end } = event
-                            return (
-                                <div>
-                                    <div style={{ fontSize: '85%' }}>{event.title}</div>
-                                    <div style={{ fontSize: '85%' }}>{dayjs(start).format('HH:mm')}-{dayjs(end).format('HH:mm')}</div>
-                                </div>
-                            )
-                        },
-                    }}
-                    eventPropGetter={(event, start, end) => {
-                        let backgroundColor = ''
-                        let current = new Date()
-                        if (current < start) {
-                            backgroundColor = '#ffcccb'
-                        } else if (current > end) {
-                            backgroundColor = '#fff7b9'
-                        } else if (dayjs(current).isBetween(start, end)) {
-                            backgroundColor = '#c4fcbb'
-                        }
-
-                        return {
-                            style: {
-                                backgroundColor,
-                                color: 'black'
+            <div style={{ height: "80%", width: '80%',display:'flex',flexDirection:'row' }}>
+                <div style={{ width: '95%' }}>
+                    <Calendar
+                        localizer={dayjsLocalizer(dayjs)}
+                        events={meetingRooms}
+                        components={{
+                            day: true,
+                            week: true,
+                            year: true,
+                            event: ({ event }) => {
+                                const { title, start, end } = event
+                                return (
+                                    <div>
+                                        <div style={{ fontSize: '85%' }}>{event.title}</div>
+                                        <div style={{ fontSize: '85%' }}>{dayjs(start).format('HH:mm')}-{dayjs(end).format('HH:mm')}</div>
+                                    </div>
+                                )
+                            },
+                        }}
+                        eventPropGetter={(event, start, end) => {
+                            let backgroundColor = ''
+                            let current = new Date()
+                            if (current < start) {
+                                backgroundColor = '#ffcccb'
+                            } else if (current > end) {
+                                backgroundColor = '#fff7b9'
+                            } else if (dayjs(current).isBetween(start, end)) {
+                                backgroundColor = '#c4fcbb'
                             }
-                        }
-                    }}
-                    startAccessor='start'
-                    endAccessor='end'
-                    defaultView='week'
-                />
+
+                            return {
+                                style: {
+                                    backgroundColor,
+                                    color: 'black'
+                                }
+                            }
+                        }}
+                        startAccessor='start'
+                        endAccessor='end'
+                        defaultView='week'
+                    />
+                </div>
+                <div style={{ width: '5%' }}>
+                    <RoomStateMessage color='#ffcccb' message='會議尚未開始' />
+                    <RoomStateMessage color='#fff7b9' message='會議已結束' />
+                    <RoomStateMessage color='#c4fcbb' message='正在開會中' />
+                </div>
             </div>
         </div>
     );

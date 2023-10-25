@@ -1,13 +1,13 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BsFillChatLeftTextFill } from "react-icons/bs";
 import { Button, Modal } from 'semantic-ui-react';
 
 function RemarkModal({ meeting }) {
     const [isRemark, setIsRemark] = useState(false);
 
-    useEffect(()=>{console.log(meeting)},[])
+    // useEffect(()=>{console.log(meeting)},[])
 
     return (
         <Modal

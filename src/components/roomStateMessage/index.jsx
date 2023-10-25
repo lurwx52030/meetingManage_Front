@@ -4,9 +4,9 @@ function RoomStateMessage({ color, message }) {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignContent: 'center',
+        alignItems: 'center',
         width: '100%',
-        margin: '10px'
+        margin: '25px'
     }
 
     const colorCardStyle = {
@@ -19,17 +19,18 @@ function RoomStateMessage({ color, message }) {
     const msgStyle = {
         width: '65%',
         height: '80px',
-        alignItems: 'center',
         display: 'flex',
+        alignItems: 'center',
         margin: '2px'
     }
 
     return (
         <div style={containerStyle}>
             <div style={colorCardStyle}></div>
-            <p style={msgStyle}>{message}</p>
+            <div style={msgStyle}>{message}</div>
         </div>
     )
 }
 
 export { RoomStateMessage };
+

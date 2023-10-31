@@ -66,12 +66,13 @@ const CreateMeeting = () => {
         e.preventDefault()
         const create = {
             name,
-            start: (new Date(start)).toISOString(),
-            end: (new Date(end)).toISOString(),
+            start: new Date(start),
+            end: new Date(end),
             meetingRoomId,
             creatorId,
             notificationTime
         };
+        console.log(create)
 
         fetch('http://localhost:5000/meeting', {
             method: 'POST',
@@ -123,67 +124,72 @@ const CreateMeeting = () => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="createmeeting">
-                <h2>建立會議</h2>
-                <div className='createmeeting_row'>
-                    <div>
-                        <label><b>會議名稱：</b></label>
-                        <input type="text" value={name} onChange={(e) => setname(e.target.value)} />
+                <div style={{ width: "40%", height: "20%" }}><h2>建立會議</h2></div>
+                <div style={{ width: "40%", height: "80%" }}>
+                    <div className='createmeeting_row'>
+                        <div>
+                            <label><b>會議名稱：</b></label>
+                            <input type="text" value={name} onChange={(e) => setname(e.target.value)} />
+                        </div>
                     </div>
-                </div>
-                <div className='createmeeting_row'>
-                    <div className='announcement-container'>
-                        <label><b>會議通知：</b></label>
-                        <input type="radio" name="announcement" value="Open" id="open" checked={announcement === "Open"} onChange={onOptionChange} />
-                        <label htmlFor='open'>開啟</label>
-                        <input type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
-                        <label htmlFor='close'>關閉</label>
-                        {announcement === 'Open' && (
-                            <select
-                                className="custom-select"
-                                id="shopSearchSelect"
-                                value={notificationTime}
-                                onChange={(e) => setNotificationTime(parseInt(e.target.value))}
-                            >
-                                <option value="0">請選擇時間</option>
-                                <option value="5">5分鐘</option>
-                                <option value="10">10分鐘</option>
-                                <option value="15">15分鐘</option>
-                                <option value="30">30分鐘</option>
+                    <div className='createmeeting_row'>
+                        <div className='announcement-container'>
+                            <label><b>會議通知：</b></label>
+                            <input type="radio" name="announcement" value="Open" id="open" checked={announcement === "Open"} onChange={onOptionChange} />
+                            <label htmlFor='open'>開啟</label>
+                            <input type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
+                            <label htmlFor='close'>關閉</label>
+                            {announcement === 'Open' && (
+                                <select
+                                    className="custom-select"
+                                    id="shopSearchSelect"
+                                    value={notificationTime}
+                                    onChange={(e) => setNotificationTime(parseInt(e.target.value))}
+                                >
+                                    <option value="0">請選擇時間</option>
+                                    <option value="5">5分鐘</option>
+                                    <option value="10">10分鐘</option>
+                                    <option value="15">15分鐘</option>
+                                    <option value="30">30分鐘</option>
+                                </select>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className='createmeeting_row'>
+                        <div className='meeting_start_time'>
+                            <label><b>會議開始時間：</b></label>
+                            <input type="datetime-local" value={start} onChange={(e) => {
+                                console.log(e.target.value)
+                                setstart(e.target.value)
+                            }}
+
+                            />
+
+                        </div>
+                    </div>
+                    <div className='createmeeting_row'>
+                        <div className='meeting_end_time'>
+                            <label><b>會議結束時間：</b></label>
+                            <input type="datetime-local" value={end} onChange={(e) => setend(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className='createmeeting_row'>
+                        <div>
+                            <label><b>會議地點：</b></label>
+                            <select className="custom-select" id="shopSearchSelect" onChange={(e) => setmeetingRoomId(e.target.value)}>
+                                <option value=''>請選擇會議地點</option>
+                                {
+                                    meetingRooms.map(meetingRoom => {
+                                        return <option key={meetingRoom.id} value={meetingRoom.id}>{meetingRoom.name}</option>
+                                    })
+                                }
                             </select>
-                        )}
+                        </div>
                     </div>
-                </div>
-
-                <div className='createmeeting_row'>
-                    <div className='meeting_start_time'>
-                        <label><b>會議開始時間：</b></label>
-                        <input type="datetime-local" value={start} onChange={(e) => setstart(e.target.value)}
-
-                        />
-
+                    <div className='createmeeting_row'>
+                        <button type="meetingb"><b>建立</b></button>
                     </div>
-                </div>
-                <div className='createmeeting_row'>
-                    <div className='meeting_end_time'>
-                        <label><b>會議結束時間：</b></label>
-                        <input type="datetime-local" value={end} onChange={(e) => setend(e.target.value)} />
-                    </div>
-                </div>
-                <div className='createmeeting_row'>
-                    <div>
-                        <label><b>會議地點：</b></label>
-                        <select className="custom-select" id="shopSearchSelect" onChange={(e) => setmeetingRoomId(e.target.value)}>
-                            <option value=''>請選擇會議地點</option>
-                            {
-                                meetingRooms.map(meetingRoom => {
-                                    return <option key={meetingRoom.id} value={meetingRoom.id}>{meetingRoom.name}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className='createmeeting_row'>
-                    <button type="create"><b>建立</b></button>
                 </div>
             </div>
         </form>

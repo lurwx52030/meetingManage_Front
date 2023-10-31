@@ -225,7 +225,7 @@ const Meeting = () => {
 
   return (
     <div className='meetingContainer'>
-      <h2 style={{ display: 'block' }}>會議清單</h2>
+      <h2>會議清單</h2>
       <div className='search'>
         <input
           type="text"
@@ -241,7 +241,7 @@ const Meeting = () => {
         />
         <button className='meetingb' onClick={handleSearch}>查詢</button>
       </div>
-      <div className='ag-theme-alpine' style={{ height: '100vw', width: '80vw' }}>
+      <div className='ag-theme-alpine center-table' style={{ height: '495px', width: '95vw' }}>
         <AgGridReact
           ref={agGridRef}
           rowData={rowData}
@@ -249,6 +249,7 @@ const Meeting = () => {
           defaultColDef={defaultColDef}
           rowSelection='multiple'//同時選擇多行
           animateRows={true} //整行式變動
+          // pagination={true} // 分頁
           onGridReady={(event => {
             event.api.sizeColumnsToFit()
           })}

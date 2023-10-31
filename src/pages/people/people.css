@@ -1,9 +1,11 @@
 .center-container {
   display: flex;
   flex-direction: column;
-  /* align-items: center;
-    justify-content: center; */
-  /* height: 100vh; */
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 3% 5% 5% 5%;
 }
 
 .user-table {
@@ -19,7 +21,7 @@
   text-align: center;
 }
 
-.PeopleContainer{
+.PeopleContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,13 +46,8 @@
 
 
 .search {
-  /* position: relative; */
-  /* left: 220px; */
-  width: 50%;
-  /* 寬度調整 */
-  margin-top: 95px;
-  margin-bottom: 10px;
-  /* 增加底部間距 */
+  display: flex;
+  justify-content: center;
 }
 
 .edit1-button,

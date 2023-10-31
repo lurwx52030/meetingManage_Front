@@ -59,33 +59,33 @@ const Updateuser = () => {
   }, []);
 
   return (
-    <div className="update-container">
-      <h2>修改資料</h2>
-      <form className="updateform-container" onSubmit={submitActionHandler}>
-        <div className='row'>
+    <form className="createmeeting" onSubmit={submitActionHandler}>
+      <div style={{ width: "30%", height: "20%" }}><h2>修改資料</h2></div>
+      <div style={{ width: "30%", height: "80%" }}>
+        <div className='createmeeting_row'>
           <div>
             <label><b>員工編號</b></label><br></br>
             <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
           </div>
         </div>
-        <div className='row'>
+        <div className='createmeeting_row'>
           <div>
             <label><b>帳號</b></label><br></br>
             <input type="text" value={uaccount} onChange={(e) => setUaccount(e.target.value)} />
           </div>
         </div>
-        <div className='row'>
+        <div className='createmeeting_row'>
           <div>
             <label><b>姓名</b></label><br></br>
             <input type="text" value={uname} onChange={(e) => setUname(e.target.value)} />
           </div>
         </div>
-        <div className='buttons'>
-          <button type="submit">確認</button>
-          <button onClick={() => navigate('/People')}>取消</button>
+        <div style={{ display: "flex", flexDirection: 'row' }}>
+          <button className="meetingb" style={{marginRight:'5px'}} type="submit">確認</button>
+          <button className="meetingb" onClick={() => navigate('/People')}>取消</button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

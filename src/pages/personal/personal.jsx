@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './personal.css'; // 導入CSS
 
 const Personal = () => {
@@ -10,7 +11,9 @@ const Personal = () => {
 
 
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
+
+  const { isLogin, setIsLogin } = useIsLoginStore();
 
 
   useEffect(() => {
@@ -23,8 +26,21 @@ const Personal = () => {
       }).then((res) => {
         if (res.data.status === 200) {
           let data = res.data.data
-          console.log(data)
           setAccount(data.account)
+        }
+      }).catch(err => {
+        console.log(err.response)
+        switch (err.response.status) {
+          case 401:
+            alert("請重新登入！")
+            localStorage.removeItem("jwtToken")
+            localStorage.removeItem('userid')
+            setIsLogin(false)
+            navigate('/')
+            break;
+          default:
+            alert(err.response.data.message)
+            break;
         }
       })
   }, [])
@@ -37,7 +53,7 @@ const Personal = () => {
       account,
       password
     }
-  
+
     axios.put(
       `http://localhost:5000/user/account/${userid}`,
       data,
@@ -60,27 +76,29 @@ const Personal = () => {
 
 
   return (
-    <div className="personal-container">
-      <h2>個人資料</h2>
-      <form className="form-container" onSubmit={handlechange}>
-        <div className='row-personal'>
-          <div>
-            <label><b>帳號</b></label><br></br>
-            <input type="text" value={account} onChange={(e) => setAccount(e.target.value)} />
+    <form onSubmit={handlechange}>
+      <div className="personalProfile">
+        <h2 style={{ width: "30%", height: "20%" }}>個人資料</h2>
+        <div style={{ width: "30%", height: "80%" }}>
+          <div className='createmeeting_row'>
+            <div>
+              <label><b>帳號</b></label><br></br>
+              <input type="text" value={account || ''} onChange={(e) => setAccount(e.target.value)} />
+            </div>
           </div>
-        </div>
-        <div className='row-personal'>
-          <div>
-            <label><b>密碼</b></label><br></br>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <div className='createmeeting_row'>
+            <div>
+              <label><b>密碼</b></label><br></br>
+              <input type="password" value={password || ''} onChange={(e) => setPassword(e.target.value)} />
+            </div>
           </div>
-        </div>
 
-        <div className='personal-buttons'>
-          <button type="submit"><b>更改</b></button>
+          <div className='createmeeting_row'>
+            <button className="meetingb" type="submit"><b>更改</b></button>
+          </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

@@ -220,7 +220,8 @@ function MeetingMember() {
     return (
         <div className='meetingContainer'>
             <h2 style={{ display: 'block' }}>會議參與者-{location.state.name}</h2>
-            <div className='search'>
+            <div>
+                <div>
                 <input
                     type="text"
                     placeholder="...搜尋"
@@ -235,6 +236,7 @@ function MeetingMember() {
                 >
                     查詢
                 </button>
+                </div>
                 <div style={{ marginTop: '10px' }}>
                     <select
                         value={selectEmployee}
@@ -258,7 +260,7 @@ function MeetingMember() {
 
                     <button
                         style={{ marginLeft: '5px' }}
-                        className='sinsoutb'
+                        className='meetingb'
                         onClick={() => {
                             navigate('/meeting')
                         }}
@@ -267,7 +269,7 @@ function MeetingMember() {
                     </button>
                 </div>
             </div>
-            <div className='ag-theme-alpine' style={{ height: '100vw', width: '80vw' }}>
+            <div className='ag-theme-alpine' style={{ height: '460px', width: '95vw' }}>
                 <AgGridReact
                     ref={agGridRef}
                     rowData={members}

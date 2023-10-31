@@ -21,24 +21,26 @@ import Updateuser from './pages/updateUser/updateUser';
 const App = () => {
   return (
     <Router>
-      <div>
+      <div style={{ width: '100%', height: '100%' }}>
         <Navigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Sign" element={<Sign />} />
-          <Route path="/meeting" element={<Meeting />} />
-          <Route path="/Createmeeting" element={<Createmeeting />} />
-          <Route path='/editMeeting' element={<UpdateMeeting />} />
-          <Route path='/file' element={<MeetingFile />} />
-          <Route path='/member' element={<MeetingMember />} />
-          <Route path='/attendance' element={<Attendance />} />
-          <Route path="/meetingRoom" element={<MeetingRoom />} />
-          <Route path='/roomDetails' element={<RoomDetails />} />
-          <Route path="/People" element={<People />} />
-          <Route path='/editUser' element={<Updateuser />} />
-          <Route path='/personal' element={<Personal />} />
-        </Routes>
+        <div style={{ width: '100%', height: '80%' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Sign" element={<Sign />} />
+            <Route path="/meeting" element={<Meeting />} />
+            <Route path="/Createmeeting" element={<Createmeeting />} />
+            <Route path='/editMeeting' element={<UpdateMeeting />} />
+            <Route path='/file' element={<MeetingFile />} />
+            <Route path='/member' element={<MeetingMember />} />
+            <Route path='/attendance' element={<Attendance />} />
+            <Route path="/meetingRoom" element={<MeetingRoom />} />
+            <Route path='/roomDetails' element={<RoomDetails />} />
+            <Route path="/People" element={<People />} />
+            <Route path='/editUser' element={<Updateuser />} />
+            <Route path='/personal' element={<Personal />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

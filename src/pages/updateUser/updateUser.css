@@ -52,9 +52,9 @@ input[type="password"] {
 h2 {
   font-size: 30px;
   margin-bottom: 20px;
-  position: absolute;
+  /* position: absolute;
   top: 110px;
-  left: 15%;
+  left: 15%; */
 }
 
 .buttons {

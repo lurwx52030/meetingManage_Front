@@ -118,7 +118,7 @@ const MeetingRoom = () => {
   ];
 
   return (
-    <div className="roomContainer">
+    <div className="meetingContainer">
       <h2>會議室</h2>
       <div className="search">
         <input
@@ -126,9 +126,9 @@ const MeetingRoom = () => {
           placeholder="...搜尋"
           onChange={(e) => setKey(e.target.value)}
         />
-        <button onClick={() => handleSearch(key)}>查詢</button>
+        <button className='meetingb' style={{marginLeft:"5px"}} onClick={() => handleSearch(key)}>查詢</button>
       </div>
-      <div className="ag-theme-alpine" style={{ height: '100vw', width: '80vw' }}>
+      <div className="ag-theme-alpine" style={{ height: '495px', width: '95vw' }}>
         <AgGridReact
           ref={agGridRef}
           rowData={rowData}

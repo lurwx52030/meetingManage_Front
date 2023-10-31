@@ -199,7 +199,7 @@ const People = ({ loginData, setLoginData }) => {
   }, []);
 
   return (
-    <div className="PeopleContainer">
+    <div className="meetingContainer">
       <h2>人員管理</h2>
       <div className="search">
         <input
@@ -207,9 +207,9 @@ const People = ({ loginData, setLoginData }) => {
           placeholder="...搜尋"
           onChange={(e) => setKey(e.target.value)}
         />
-        <button onClick={handleSearch}>查詢</button>
+        <button className='meetingb' style={{marginLeft:'5px'}} onClick={handleSearch}>查詢</button>
       </div>
-      <div className="ag-theme-alpine" style={{ height: '100vw', width: '80vw' }}>
+      <div className="ag-theme-alpine" style={{ height: '100vw', width: '95vw' }}>
         <AgGridReact
           ref={agGridRef}
           rowData={rowData}

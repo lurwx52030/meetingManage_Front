@@ -84,7 +84,7 @@ const RoomDetails = () => {
     return (
         <div
             className="roomDetailContainer"
-            style={{ height: '100vh' }}
+            style={{ height: '100%' }}
         >
             <h2>會議室借用狀況-{location.state.name}</h2>
             <div style={{ height: "80%", width: '80%',display:'flex',flexDirection:'row' }}>

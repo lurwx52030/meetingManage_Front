@@ -243,35 +243,36 @@ function MeetingFile() {
                     onClick={handleSearch}>
                     查詢
                 </button>
-                <form onSubmit={onUpload}>
-                    <div style={{ marginTop: '10px' }}>
-                        <input
-                            type="file"
-                            ref={fileRef}
-                            onChange={(e) => {
-                                setUploadFiless(e.target.files)
-                            }}
-                            multiple
-                        />
-                        <button
-                            style={{ marginLeft: '5px' }}
-                            className='meetingb'
-                            type='submit'
-                        >
-                            <BsFillCloudArrowUpFill />
-                            上傳
-                        </button>
-                        <button
-                            style={{ marginLeft: '5px' }}
-                            className='meetingb'
-                            onClick={() => { navigate('/meeting') }}
-                        >
-                            返回
-                        </button>
-                    </div>
-                </form>
             </div>
-            <div className='ag-theme-alpine' style={{ height: '100vw', width: '80vw' }}>
+
+            <form onSubmit={onUpload}>
+                <div style={{ marginTop: '10px' }}>
+                    <input
+                        type="file"
+                        ref={fileRef}
+                        onChange={(e) => {
+                            setUploadFiless(e.target.files)
+                        }}
+                        multiple
+                    />
+                    <button
+                        style={{ marginLeft: '5px' }}
+                        className='meetingb'
+                        type='submit'
+                    >
+                        <BsFillCloudArrowUpFill />
+                        上傳
+                    </button>
+                    <button
+                        style={{ marginLeft: '5px' }}
+                        className='meetingb'
+                        onClick={() => { navigate('/meeting') }}
+                    >
+                        返回
+                    </button>
+                </div>
+            </form>
+            <div className='ag-theme-alpine' style={{ height: '460px', width: '95vw',marginTop:'15px' }}>
                 <AgGridReact
                     ref={agGridRef}
                     rowData={files}

@@ -3,7 +3,8 @@ nav {
   background-color: #ffffff;
   padding: 10px;
   font-size: 20px;
-}
+  width: 100%;
+} 
 
 nav ul {
   list-style: none;

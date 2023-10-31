@@ -1,3 +1,19 @@
+.meetingContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 1% 0 0 3%;
+  width: 100%;
+  height: 100%;
+}
+
+.search{
+  left: 0;
+  margin: 1% 0;
+}
+
+
 .search input[type="text"] {
   background-color: #c8c4c4;
   /* 背景為灰色 */
@@ -9,23 +25,11 @@
   /* 圓角效果 */
 }
 
-.meetingContainer{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 
 .search input[type="text"]:hover {
   background-color: #e0e0e0;
   /* 當屬標停留在上面，變成淺灰色*/
 }
-
-.search{
-  left: 0;
-}
-
 
 .wrenchicon {
   width: 30px;

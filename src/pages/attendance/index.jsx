@@ -53,10 +53,12 @@ function Attendance() {
     const agGridRef = useRef();
     const [checkin, setCheckin] = useState(false);
     const [checkout, setCheckout] = useState(false);
+    const socketRef = useRef();
     const navigate = useNavigate();
     const location = useLocation();
     const [size, setSize] = useState([0, 0]);
     const { isLogin, setIsLogin } = useIsLoginStore();
+
 
     const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
         { headerName: '員工id', field: 'id', filter: true, sortable: true },
@@ -113,32 +115,8 @@ function Attendance() {
         }
     }, [])
 
-    useEffect(() => {
-        console.log(checkin, checkout)
 
-        if (checkin || checkout) {
-            realTimeAttendanceState()
-        }
-    }, [checkin, checkout])
-
-    const resetState = (socket, counter) => {
-        counter = 0;
-        if (checkin) {
-            setCheckin(!checkin)
-        } else if (checkout) {
-            setCheckout(!checkout)
-        }
-        socket.close();
-
-        return [counter];
-    }
-
-    const resizeUpdate = () => {
-        autoSizeAll()
-        sizeToFit()
-    }
-
-    const realTimeAttendanceState = () => {
+    const socketOpen = useCallback(() => {
         console.log(location.state.id);
         const socket = new WebSocket('ws://localhost:5000');
         let x;
@@ -151,20 +129,7 @@ function Attendance() {
                 data: location.state.id
             }))
 
-            let counter = 0;
-            x = setInterval(() => {
-                socket.send(JSON.stringify({
-                    event: 'member',
-                    data: location.state.id
-                }))
-                console.log(counter, new Date());
-                console.log(checkin, checkout)
-                if (counter === 60 * location.state.checkLimit) {
-                    clearInterval(x);
-                    counter = 0;
-                }
-                counter++;
-            }, 1000);
+            socketAttendanceState();
         };
 
         socket.onmessage = function (event) {
@@ -180,6 +145,51 @@ function Attendance() {
         socket.onclose = function () {
             console.log('簽到簽退結束')
         }
+
+        socketRef.current = socket;
+    }, [location.state.id])
+
+    useEffect(() => {
+        console.log(checkin, checkout);
+        if (checkin) {
+            socketOpen();
+        } else if (checkout) {
+            socketOpen();
+        } else {
+            if (socketRef.current !== undefined && socketRef.current !== null && socketRef.current instanceof WebSocket) {
+                socketRef.current.close();
+                socketRef.current = null;
+            }
+        }
+    }, [checkin, checkout, socketOpen])
+
+    const socketAttendanceState = useCallback(() => {
+        let counter = 0;
+        let x = setInterval(function () {
+            if (socketRef.current !== undefined && socketRef.current !== null && socketRef.current instanceof WebSocket) {
+                socketRef.current.send(JSON.stringify({
+                    event: 'member',
+                    data: location.state.id
+                }))
+                console.log(counter, new Date());
+                console.log(checkin, checkout)
+                if (counter === 60 * location.state.checkLimit) {
+                    counter = 0;
+                    clearInterval(x);
+                    socketRef.current.close();
+                }
+                counter++;
+            } else {
+                clearInterval(x);
+            }
+        }, 1000);
+
+        return () => clearInterval(x);
+    }, [checkin, checkout, location.state.checkLimit, location.state.id])
+
+    const resizeUpdate = () => {
+        autoSizeAll()
+        sizeToFit()
     }
 
 
@@ -245,12 +255,13 @@ function Attendance() {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
         }).then(res => {
-            console.log(res.data.msg)
+            console.log(res.data.msg);
 
+            const state = res.data.msg.includes("開啟") ? true : false;
             if (type === 'checkin') {
-                setCheckin(res.data.msg.includes("開啟") ? true : false)
+                setCheckin(state);
             } else if (type === 'checkout') {
-                setCheckout(res.data.msg.includes("開啟") ? true : false)
+                setCheckout(state);
             }
         }).catch(err => {
             if (err.response.status === 401) {
@@ -313,34 +324,36 @@ function Attendance() {
 
     return (
         <div className='meetingContainer'>
-            <h2 style={{ display: 'block' }}>簽到簽退</h2>
-            <div className='search'>
-                <input
-                    type="text"
-                    placeholder="...搜尋"
-                    onChange={(e) => {
-                        setKey(e.target.value)
-                    }}
-                />
-                <button
-                    style={{ marginLeft: '5px', }}
-                    className='sinsoutb'
-                    onClick={handleSearch}
-                >
-                    查詢
-                </button>
-                <button
-                    style={{ marginLeft: '5px' }}
-                    className='sinsoutb'
-                    onClick={() => {
-                        navigate('/meeting')
-                    }}
-                >
-                    返回
-                </button>
-                <div style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: '70%' }}>
+            <h2 style={{ display: 'block' }}>簽到簽退-{location.state.name}</h2>
+            <div className='searchContainer'>
+                <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <input
+                        type="text"
+                        placeholder="...搜尋"
+                        onChange={(e) => {
+                            setKey(e.target.value)
+                        }}
+                    />
                     <button
-                        style={{ backgroundColor: checkin ? 'blue' : 'rgb(82, 80, 80)', margin: '5px' }}
+                        style={{ marginLeft: '5px', }}
+                        className='sinsoutb'
+                        onClick={handleSearch}
+                    >
+                        查詢
+                    </button>
+                    <button
+                        style={{ marginLeft: '5px' }}
+                        className='sinsoutb'
+                        onClick={() => {
+                            navigate('/meeting')
+                        }}
+                    >
+                        返回
+                    </button>
+                </div>
+                <div className='attendanceBtns'>
+                    <button
+                        style={{ backgroundColor: checkin ? 'blue' : 'rgb(82, 80, 80)', margin: '0 2.5px' }}
                         className='sinsoutb'
                         onClick={() => {
                             attendanceStateHandler('checkin', location.state.id, checkin)
@@ -350,7 +363,7 @@ function Attendance() {
                         開啟/關閉簽到
                     </button>
                     <button
-                        style={{ backgroundColor: checkout ? 'blue' : 'rgb(82, 80, 80)', margin: '5px' }}
+                        style={{ backgroundColor: checkout ? 'blue' : 'rgb(82, 80, 80)', margin: '0 2.5px' }}
                         className='sinsoutb'
                         onClick={() => {
                             attendanceStateHandler('checkout', location.state.id, checkout)
@@ -361,7 +374,7 @@ function Attendance() {
                     </button>
                 </div>
             </div>
-            <div className='ag-theme-alpine center-table' style={{ height: '100vw', width: '80vw', marginTop: '15px' }}>
+            <div className='ag-theme-alpine center-table' style={{ height: '450px', width: '95vw' }}>
                 <AgGridReact
                     ref={agGridRef}
                     rowData={members}
@@ -369,6 +382,7 @@ function Attendance() {
                     rowSelection='multiple'//同時選擇多行
                     animateRows={true} //整行式變動
                     onGridReady={onGridReady}
+
                 />
             </div>
             <div className="button-container">

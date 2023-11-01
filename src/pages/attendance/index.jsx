@@ -87,7 +87,7 @@ function Attendance() {
         },
         {
             headerName: '備註', field: 'operate', cellRenderer: (params) => {
-                return (<RemarkModal meeting={params.data} />)
+                return (<RemarkModal participant={params.data} meetingId={location.state.id} />)
             }
         },
     ]);

@@ -14,33 +14,33 @@ function Attendance() {
     // 查詢，使用 employeeID 和 emoploeeName 進行篩選
     const handleSearch = () => {
         if (key !== '') {
-            axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-                    }
+            // axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`,
+            //     {
+            //         headers: {
+            //             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+            //         }
 
-                }
-            )
-                .then(res => {
-                    let result = res.data.data.filter(row => {
-                        return (
-                            row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase())
-                        );
-                    })
+            //     }
+            // )
+            //     .then(res => {
+            //         let result = res.data.data.filter(row => {
+            //             return (
+            //                 row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase())
+            //             );
+            //         })
 
-                    setMembers(result);
-                });
+            //         setMembers(result);
+            //     });
         } else if (key === '') {
-            axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-                }
-            })
-                .then(res => {
-                    let result = res.data.data;
-                    setMembers(result);
-                });
+            // axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`, {
+            //     headers: {
+            //         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+            //     }
+            // })
+            //     .then(res => {
+            //         let result = res.data.data;
+            //         setMembers(result);
+            //     });
         }
     };
 
@@ -374,6 +374,45 @@ function Attendance() {
         params.api.sizeColumnsToFit();
     };
 
+    const attendanceStateFilter = useCallback((state) => {
+        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
+        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
+
+        singInFilter.setModel({ type: 'empty' });
+        singOutFilter.setModel({ type: 'empty' });
+
+        if (state === 'singin') {
+            singInFilter.setModel({
+                type: 'NotSingin',
+                filter: null,
+                filterTo: null,
+
+            });
+        } else if (state === 'singout') {
+            singOutFilter.setModel({
+                type: 'NotSingout',
+                filter: null,
+                filterTo: null,
+
+            });
+        } else if (state === 'noAttendance') {
+            singInFilter.setModel({
+                type: 'NotSingin',
+                filter: null,
+                filterTo: null,
+
+            });
+            singOutFilter.setModel({
+                type: 'NotSingout',
+                filter: null,
+                filterTo: null,
+
+            });
+        }
+
+        agGridRef.current.api.onFilterChanged();
+    }, [])
+
     const cleanFilters = useCallback(() => {
         agGridRef.current.api.setFilterModel(null);
     }, [])
@@ -434,63 +473,19 @@ function Attendance() {
                     Reset
                 </button>
                 <button
-                    onClick={() => {
-                        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
-                        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
-
-                        singOutFilter.setModel({type:'empty'});
-
-                        singInFilter.setModel({
-                            type: 'NotSingin',
-                            filter: null,
-                            filterTo: null,
-
-                        });
-                        agGridRef.current.api.onFilterChanged();
-                    }}
+                    onClick={() => attendanceStateFilter('singin')}
                     style={{ margin: '0 2.5px' }}
                 >
                     尚未簽到
                 </button>
                 <button
-                    onClick={() => {
-                        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
-                        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
-
-                        singInFilter.setModel({type:'empty'});
-
-                        singOutFilter.setModel({
-                            type: 'NotSingout',
-                            filter: null,
-                            filterTo: null,
-
-                        });
-                        agGridRef.current.api.onFilterChanged();
-                    }}
+                    onClick={() => attendanceStateFilter('singout')}
                     style={{ margin: '0 2.5px' }}
                 >
                     尚未簽退
                 </button>
                 <button
-                    onClick={() => {
-                        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
-                        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
-
-                        singInFilter.setModel({
-                            type: 'NotSingin',
-                            filter: null,
-                            filterTo: null,
-
-                        });
-                        singOutFilter.setModel({
-                            type: 'NotSingin',
-                            filter: null,
-                            filterTo: null,
-
-                        });
-
-                        agGridRef.current.api.onFilterChanged();
-                    }}
+                    onClick={() => attendanceStateFilter('noAttendance')}
                     style={{ margin: '0 2.5px' }}
                 >
                     未出席(簽到簽退皆無)

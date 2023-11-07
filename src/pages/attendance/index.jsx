@@ -10,7 +10,6 @@ import { RemarkModal } from '../../components/modals/RemarkModal';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './style.css';
 
-
 function Attendance() {
     // 查詢，使用 employeeID 和 emoploeeName 進行篩選
     const handleSearch = () => {
@@ -64,25 +63,76 @@ function Attendance() {
         { headerName: '員工id', field: 'id', filter: true, sortable: true },
         { headerName: '員工姓名', field: 'name', filter: true, sortable: true },
         {
-            headerName: '簽到/簽退', field: 'operate', cellRenderer: (params) => (
+            headerName: '簽到', field: 'singin',
+            filter: 'agTextColumnFilter',
+            filterParams: {
+                filterOptions: [
+                    "empty",
+                    {
+                        displayKey: 'IsSingin',
+                        displayName: '已簽到',
+                        numberOfInputs: 0,
+                        predicate: ([filterValue], cellValue) => {
+                            console.log(filterValue, cellValue);
+                            return cellValue !== null
+                        }
+                    },
+                    {
+                        displayKey: 'NotSingin',
+                        displayName: '未簽到',
+                        numberOfInputs: 0,
+                        predicate: ([filterValue], cellValue) => {
+                            console.log(filterValue, cellValue);
+                            return cellValue === null;
+                        }
+                    }
+                ],
+                maxNumConditions: 1
+            },
+            cellRenderer: (params) => (
                 <div>
                     <Button
-                        className='signin-button'
                         style={{ backgroundColor: params.data.singin !== null ? '#42f55d' : '#e0e1e2 none' }}
                         onClick={() => checkinHandler(params.data.id)}
                     >
                         <AiOutlineCheckSquare />
                     </Button>
-                    {/* <Button className='signout-button' onClick={() => signout(params.data.id)}  ><AiOutlineCheckSquare /></Button> */}
+                </div>
+
+            )
+        },
+        {
+            headerName: '簽退', field: 'singout',
+            filter: 'agTextColumnFilter',
+            filterParams: {
+                filterOptions: [
+                    "empty",
+                    {
+                        displayKey: 'IsSingout',
+                        displayName: '已簽退',
+                        numberOfInputs: 0,
+                        predicate: ([filterValue], cellValue) => cellValue !== null
+                    },
+                    {
+                        displayKey: 'NotSingout',
+                        displayName: '未簽退',
+                        numberOfInputs: 0,
+                        predicate: ([filterValue], cellValue) => cellValue === null
+                    }
+                ],
+                maxNumConditions: 1
+            },
+            cellRenderer: (params) => (
+                <div>
                     <Button
-                        className='nosignin-button'
+
                         style={{ backgroundColor: params.data.singout !== null ? '#42f55d' : '#e0e1e2 none' }}
                         onClick={() => checkoutHandler(params.data.id)}
                     >
                         <AiOutlineFrown />
                     </Button>
-                    {/* <Button className='nosignout-button' onClick={() => nosignout(params.data.id)}  ><AiOutlineCloseSquare /></Button> */}
                 </div>
+
             )
         },
         {
@@ -102,9 +152,10 @@ function Attendance() {
         return (params) => params.data.id;
     }, []);
 
+    useEffect(() => { console.log(members) }, [members])
 
     useEffect(() => {
-        window.addEventListener('resize', resizeUpdate)
+        window.addEventListener('resize', resizeUpdate);
         getMembers();
         getAttendanceState();
         // sleep 100ms
@@ -150,7 +201,7 @@ function Attendance() {
     }, [location.state.id])
 
     useEffect(() => {
-        console.log(checkin, checkout);
+        // console.log(checkin, checkout);
         if (checkin) {
             socketOpen();
         } else if (checkout) {
@@ -212,6 +263,7 @@ function Attendance() {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
         }).then(res => {
+            // console.log(res.data.data)
             setMembers(res.data.data)
         }).catch(err => {
             console.log(err)
@@ -236,7 +288,7 @@ function Attendance() {
             const data = res.data.data
             setCheckin(data[0].isCheckin)
             setCheckout(data[0].isCheckout)
-            console.log(data[0].isCheckin, data[0].isCheckout)
+            // console.log(data[0].isCheckin, data[0].isCheckout)
         }).catch(err => {
             console.log(err)
             if (err.response.status === 401) {
@@ -322,10 +374,14 @@ function Attendance() {
         params.api.sizeColumnsToFit();
     };
 
+    const cleanFilters = useCallback(() => {
+        agGridRef.current.api.setFilterModel(null);
+    }, [])
+
     return (
         <div className='meetingContainer'>
             <h2 style={{ display: 'block' }}>簽到簽退-{location.state.name}</h2>
-            <div className='searchContainer'>
+            <div className='operateContainer'>
                 <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <input
                         type="text"
@@ -336,14 +392,12 @@ function Attendance() {
                     />
                     <button
                         style={{ marginLeft: '5px', }}
-                        className='sinsoutb'
                         onClick={handleSearch}
                     >
                         查詢
                     </button>
                     <button
                         style={{ marginLeft: '5px' }}
-                        className='sinsoutb'
                         onClick={() => {
                             navigate('/meeting')
                         }}
@@ -354,7 +408,6 @@ function Attendance() {
                 <div className='attendanceBtns'>
                     <button
                         style={{ backgroundColor: checkin ? 'blue' : 'rgb(82, 80, 80)', margin: '0 2.5px' }}
-                        className='sinsoutb'
                         onClick={() => {
                             attendanceStateHandler('checkin', location.state.id, checkin)
                         }}
@@ -364,7 +417,6 @@ function Attendance() {
                     </button>
                     <button
                         style={{ backgroundColor: checkout ? 'blue' : 'rgb(82, 80, 80)', margin: '0 2.5px' }}
-                        className='sinsoutb'
                         onClick={() => {
                             attendanceStateHandler('checkout', location.state.id, checkout)
                         }}
@@ -373,6 +425,76 @@ function Attendance() {
                         開啟/關閉簽退
                     </button>
                 </div>
+            </div>
+            <div className='operateContainer'>
+                <button
+                    onClick={cleanFilters}
+                    style={{ margin: '0 2.5px' }}
+                >
+                    Reset
+                </button>
+                <button
+                    onClick={() => {
+                        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
+                        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
+
+                        singOutFilter.setModel({type:'empty'});
+
+                        singInFilter.setModel({
+                            type: 'NotSingin',
+                            filter: null,
+                            filterTo: null,
+
+                        });
+                        agGridRef.current.api.onFilterChanged();
+                    }}
+                    style={{ margin: '0 2.5px' }}
+                >
+                    尚未簽到
+                </button>
+                <button
+                    onClick={() => {
+                        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
+                        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
+
+                        singInFilter.setModel({type:'empty'});
+
+                        singOutFilter.setModel({
+                            type: 'NotSingout',
+                            filter: null,
+                            filterTo: null,
+
+                        });
+                        agGridRef.current.api.onFilterChanged();
+                    }}
+                    style={{ margin: '0 2.5px' }}
+                >
+                    尚未簽退
+                </button>
+                <button
+                    onClick={() => {
+                        const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
+                        const singInFilter = agGridRef.current.api.getFilterInstance('singin');
+
+                        singInFilter.setModel({
+                            type: 'NotSingin',
+                            filter: null,
+                            filterTo: null,
+
+                        });
+                        singOutFilter.setModel({
+                            type: 'NotSingin',
+                            filter: null,
+                            filterTo: null,
+
+                        });
+
+                        agGridRef.current.api.onFilterChanged();
+                    }}
+                    style={{ margin: '0 2.5px' }}
+                >
+                    未出席(簽到簽退皆無)
+                </button>
             </div>
             <div className='ag-theme-alpine center-table' style={{ height: '450px', width: '95vw' }}>
                 <AgGridReact

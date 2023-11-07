@@ -16,7 +16,7 @@ function RemarkModal({ meetingId, participant }) {
     const location = useLocation();
 
     useEffect(() => {
-        console.log(participant);
+        // console.log(participant);
         // Nullish Coalescing Operator
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
         const r = participant.remark ?? ''

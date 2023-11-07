@@ -1,7 +1,6 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
-import axios from "axios";
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import binicon from '../../assets/bin.png';
@@ -34,34 +33,10 @@ const People = ({ loginData, setLoginData }) => {
   };
 
   const handleSearch = () => {
-    console.log(key)
-    console.log(rowData)
     if (key !== '') {
-      axios.get('http://localhost:5000/user', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-        }
-      })
-        .then(res => {
-          console.log(res.data.data)
-          let result = res.data.data.filter(row => {
-            return (
-              row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase()) ||
-              row.account.toLowerCase().includes(key.toLowerCase())
-            );
-          })
-          setRowData(result);
-
-        })
-    } else if (key === "") {
-      axios.get('http://localhost:5000/user', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-        }
-      }
-      ).then(res => {
-        setRowData(res.data.data)
-      })
+      agGridRef.current.api.setQuickFilter(key)
+    } else if (key === '') {
+      agGridRef.current.api.setQuickFilter();
     }
   };
 
@@ -110,7 +85,7 @@ const People = ({ loginData, setLoginData }) => {
 
   const columnDefs = [
     { headerName: '員工編號', field: 'id', filter: true, sortable: true, checkboxSelection: true },
-    { headerName: '帳號', field: 'account', filter: true, sortable: true },
+    { headerName: '帳號', field: 'account', filter: true, sortable: true, getQuickFilterText: '', },
     { headerName: '姓名', field: 'name', filter: true, sortable: true },
     {
       headerName: '修改/刪除', field: 'operate', cellRenderer: (params) => (
@@ -207,7 +182,7 @@ const People = ({ loginData, setLoginData }) => {
           placeholder="...搜尋"
           onChange={(e) => setKey(e.target.value)}
         />
-        <button className='meetingb' style={{marginLeft:'5px'}} onClick={handleSearch}>查詢</button>
+        <button className='meetingb' style={{ marginLeft: '5px' }} onClick={handleSearch}>查詢</button>
       </div>
       <div className="ag-theme-alpine" style={{ height: '100vw', width: '95vw' }}>
         <AgGridReact

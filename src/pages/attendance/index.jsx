@@ -11,40 +11,7 @@ import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './style.css';
 
 function Attendance() {
-    // 查詢，使用 employeeID 和 emoploeeName 進行篩選
-    const handleSearch = () => {
-        if (key !== '') {
-            // axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`,
-            //     {
-            //         headers: {
-            //             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-            //         }
 
-            //     }
-            // )
-            //     .then(res => {
-            //         let result = res.data.data.filter(row => {
-            //             return (
-            //                 row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase())
-            //             );
-            //         })
-
-            //         setMembers(result);
-            //     });
-        } else if (key === '') {
-            // axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`, {
-            //     headers: {
-            //         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-            //     }
-            // })
-            //     .then(res => {
-            //         let result = res.data.data;
-            //         setMembers(result);
-            //     });
-        }
-    };
-
-    //表格
     const [gridApi, setGridApi] = useState(null);
     const [members, setMembers] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState('');
@@ -60,8 +27,16 @@ function Attendance() {
 
 
     const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
-        { headerName: '員工id', field: 'id', filter: true, sortable: true },
-        { headerName: '員工姓名', field: 'name', filter: true, sortable: true },
+        {
+            headerName: '員工id', field: 'id', sortable: true,
+            filter: 'agTextColumnFilter',
+            filterParams: { JoinOperator: 'OR', maxNumConditions: 1 }
+        },
+        {
+            headerName: '員工姓名', field: 'name', sortable: true,
+            filter: 'agTextColumnFilter',
+            filterParams: { JoinOperator: 'OR', maxNumConditions: 1 }
+        },
         {
             headerName: '簽到', field: 'singin',
             filter: 'agTextColumnFilter',
@@ -152,7 +127,28 @@ function Attendance() {
         return (params) => params.data.id;
     }, []);
 
-    useEffect(() => { console.log(members) }, [members])
+    //自適應大小
+    const onGridReady = (params) => {
+        params.api.sizeColumnsToFit();
+    };
+
+    const resizeUpdate = () => {
+        autoSizeAll()
+        sizeToFit()
+    }
+
+
+    const sizeToFit = useCallback(() => {
+        agGridRef.current.api.sizeColumnsToFit();
+    }, []);
+
+    const autoSizeAll = useCallback((skipHeader) => {
+        const allColumnIds = [];
+        agGridRef.current.columnApi.getColumns().forEach((column) => {
+            allColumnIds.push(column.getId());
+        });
+        agGridRef.current.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+    }, []);
 
     useEffect(() => {
         window.addEventListener('resize', resizeUpdate);
@@ -238,23 +234,7 @@ function Attendance() {
         return () => clearInterval(x);
     }, [checkin, checkout, location.state.checkLimit, location.state.id])
 
-    const resizeUpdate = () => {
-        autoSizeAll()
-        sizeToFit()
-    }
-
-
-    const sizeToFit = useCallback(() => {
-        agGridRef.current.api.sizeColumnsToFit();
-    }, []);
-
-    const autoSizeAll = useCallback((skipHeader) => {
-        const allColumnIds = [];
-        agGridRef.current.columnApi.getColumns().forEach((column) => {
-            allColumnIds.push(column.getId());
-        });
-        agGridRef.current.columnApi.autoSizeColumns(allColumnIds, skipHeader);
-    }, []);
+    
 
     const getMembers = () => {
         // localhost:5000/meeting-member/meeting/M030
@@ -348,6 +328,7 @@ function Attendance() {
             }
         })
     }
+
     const checkoutHandler = (id) => {
         axios.get(`http://localhost:5000/meeting-member/signout/${location.state.id}/${id}`, {
             headers: {
@@ -368,11 +349,6 @@ function Attendance() {
             }
         })
     }
-
-    //自適應大小
-    const onGridReady = (params) => {
-        params.api.sizeColumnsToFit();
-    };
 
     const attendanceStateFilter = useCallback((state) => {
         const singOutFilter = agGridRef.current.api.getFilterInstance('singout');
@@ -416,6 +392,15 @@ function Attendance() {
     const cleanFilters = useCallback(() => {
         agGridRef.current.api.setFilterModel(null);
     }, [])
+
+    // 查詢，使用 employeeID 和 emoploeeName 進行篩選
+    const handleSearch = () => {
+        if (key !== '') {
+            agGridRef.current.api.setQuickFilter(key)
+        } else if (key === '') {
+            agGridRef.current.api.setQuickFilter();
+        }
+    };
 
     return (
         <div className='meetingContainer'>

@@ -78,27 +78,17 @@ const MeetingRoom = () => {
   }, []);
 
   const handleSearch = (key) => {
-    console.log(key)
-    console.log(rowData)
     if (key !== '') {
-      axios.get('http://localhost:5000/meeting-room')
-        .then(res => {
-          let result = res.data.data.filter(row => {
-            return row.location.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase())
-          })
-          setRowData(result)
-        })
-    } else if (key === "") {
-      axios.get('http://localhost:5000/meeting-room').then(res => {
-        setRowData(res.data.data)
-      })
+      agGridRef.current.api.setQuickFilter(key)
+    } else if (key === '') {
+      agGridRef.current.api.setQuickFilter();
     }
   };
 
   const columnDefs = [
     { headerName: '編號', field: 'id', filter: true, sortable: true, checkboxSelection: true },
     { headerName: '會議室名稱', field: 'name', filter: true, sortable: true },
-    { headerName: '地點', field: 'location', filter: true, sortable: true },
+    { headerName: '地點', field: 'location', filter: true, getQuickFilterText: '', sortable: true },
     {
       headerName: '操作', field: 'operate', cellRenderer: (params) => {
         return (
@@ -126,7 +116,7 @@ const MeetingRoom = () => {
           placeholder="...搜尋"
           onChange={(e) => setKey(e.target.value)}
         />
-        <button className='meetingb' style={{marginLeft:"5px"}} onClick={() => handleSearch(key)}>查詢</button>
+        <button className='meetingb' style={{ marginLeft: "5px" }} onClick={() => handleSearch(key)}>查詢</button>
       </div>
       <div className="ag-theme-alpine" style={{ height: '495px', width: '95vw' }}>
         <AgGridReact

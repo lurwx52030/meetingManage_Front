@@ -15,25 +15,10 @@ const Meeting = () => {
   // 查詢，使用 searchKeyword 和 selectedDate 進行篩選
   const handleSearch = () => {
     if (key !== '') {
-      axios.get('http://localhost:5000/meeting',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-          }
-
-        }
-      )
-        .then(res => {
-          let result = res.data.data.filter(row => {
-            return (
-              row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase()) ||
-              row.meetingRoom.toLowerCase().includes(key.toLowerCase())
-            );
-          })
-
-          setRowData(result);
-        });
+      agGridRef.current.api.setQuickFilter(key);
     } else if (key === '') {
+      agGridRef.current.api.setQuickFilter();
+
       axios.get('http://localhost:5000/meeting', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
@@ -83,17 +68,18 @@ const Meeting = () => {
   const { isLogin, setIsLogin } = useIsLoginStore();
 
   const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
-    { headerName: '會議ID', field: 'id', filter: true, sortable: true, checkboxSelection: true },
-    { headerName: '會議名稱', field: 'name', filter: true, sortable: true },
+    { headerName: '會議ID', field: 'id', filter: 'agTextColumnFilter', sortable: true, checkboxSelection: true },
+    { headerName: '會議名稱', field: 'name', filter: 'agTextColumnFilter', sortable: true },
     {
-      headerName: '開始時間', field: 'start', filter: true, sortable: true,
+      headerName: '開始時間', field: 'start', filter: true, sortable: true, getQuickFilterText: () => '',
       valueFormatter: (params) => new Date(params.data.start).toLocaleString()
     },
     {
       headerName: '結束時間', field: 'end', filter: true, sortable: true,
+      getQuickFilterText: () => '',
       valueFormatter: (params) => new Date(params.data.end).toLocaleString()
     },
-    { headerName: '地點', field: 'meetingRoom', filter: true },
+    { headerName: '地點', field: 'meetingRoom', filter: true, },
     {
       headerName: '簽到簽退',
       field: 'signinout',
@@ -240,6 +226,12 @@ const Meeting = () => {
           onChange={(e) => setSelectedDate(e.target.value)}
         />
         <button className='meetingb' onClick={handleSearch}>查詢</button>
+        <button className='meetingb' onClick={() => {
+          setKey('');
+          setSelectedDate('');
+          agGridRef.current.api.setQuickFilter();
+          getMeetings();
+        }}>Reset</button>
       </div>
       <div className='ag-theme-alpine center-table' style={{ height: '495px', width: '95vw' }}>
         <AgGridReact
@@ -257,7 +249,7 @@ const Meeting = () => {
       </div>
       <div className="button-container">
       </div>
-    </div>
+    </div >
   );
 };
 

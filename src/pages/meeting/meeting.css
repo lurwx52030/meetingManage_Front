@@ -31,6 +31,10 @@
   /* 當屬標停留在上面，變成淺灰色*/
 }
 
+.search button{
+  margin: 0 5px;
+}
+
 .wrenchicon {
   width: 30px;
   height: 30px;

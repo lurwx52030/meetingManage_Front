@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import './sign.css'; // 導入CSS
 
 const Sign = () => {
@@ -8,14 +9,15 @@ const Sign = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [Password2, setPassword2] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { backendurl } = useBackendurlStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // 簡單的登入邏輯，要視實際情況
     let user = { name, account, id, password };
     if (password === Password2) {
-      fetch('http://localhost:5000/auth/register', {
+      fetch(`${backendurl}/auth/register`, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
@@ -34,7 +36,7 @@ const Sign = () => {
               return Promise.reject(res);
           }
         })
-        .catch(error=>{
+        .catch(error => {
           alert(error.message);
         })
     } else {

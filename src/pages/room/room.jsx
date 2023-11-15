@@ -5,16 +5,18 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BsWindowStack } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './room.css';
 
 const MeetingRoom = () => {
 
-  const [rowData, setRowData] = useState([])
-  const [key, setKey] = useState('')
+  const [rowData, setRowData] = useState([]);
+  const [key, setKey] = useState('');
   const { isLogin, setIsLogin } = useIsLoginStore();
-  const agGridRef = useRef()
-  const navigate = useNavigate()
+  const {backendurl}=useBackendurlStore();
+  const agGridRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -27,7 +29,7 @@ const MeetingRoom = () => {
   }, [])
 
   const getMeetingRooms = () => {
-    axios.get('http://localhost:5000/meeting-room', {
+    axios.get(`${backendurl}/meeting-room`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
       }

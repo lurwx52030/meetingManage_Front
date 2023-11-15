@@ -5,9 +5,9 @@ import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './meeting.css';
-
 
 
 const Meeting = () => {
@@ -17,9 +17,7 @@ const Meeting = () => {
     if (key !== '') {
       agGridRef.current.api.setQuickFilter(key);
     } else if (key === '') {
-      agGridRef.current.api.setQuickFilter();
-
-      axios.get('http://localhost:5000/meeting', {
+      axios.get(`${backendurl}/meeting`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
         }
@@ -59,23 +57,43 @@ const Meeting = () => {
   const [key, setKey] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const agGridRef = useRef()
-  const url = ' http://localhost:5000/meeting';
 
   const navigate = useNavigate();
 
   const [size, setSize] = useState([0, 0]);
 
   const { isLogin, setIsLogin } = useIsLoginStore();
+  const { backendurl } = useBackendurlStore();
 
   const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
-    { headerName: '會議ID', field: 'id', filter: 'agTextColumnFilter', sortable: true, checkboxSelection: true },
-    { headerName: '會議名稱', field: 'name', filter: 'agTextColumnFilter', sortable: true },
     {
-      headerName: '開始時間', field: 'start', filter: true, sortable: true, getQuickFilterText: () => '',
+      headerName: '會議ID', field: 'id',
+      filter: 'agTextColumnFilter',
+      sortable: true,
+      checkboxSelection: true,
+    },
+    {
+      headerName: '會議名稱',
+      field: 'name',
+      filter: 'agTextColumnFilter',
+      sortable: true,
+    },
+    {
+      headerName: '開始時間', field: 'start',
+      sortable: true,
+      filter: 'agDateColumnFilter',
+      getQuickFilterText: () => '',
       valueFormatter: (params) => new Date(params.data.start).toLocaleString()
     },
     {
-      headerName: '結束時間', field: 'end', filter: true, sortable: true,
+      headerName: '結束時間', field: 'end',
+      filter: true,
+      sortable: true,
+      comparator: (date1, date2) => {
+        const d1 = new Date(date1);
+        const d2 = new Date(date2);
+        return d1 - d2;
+      },
       getQuickFilterText: () => '',
       valueFormatter: (params) => new Date(params.data.end).toLocaleString()
     },
@@ -147,7 +165,7 @@ const Meeting = () => {
   }, []);
 
   const getMeetings = () => {
-    axios.get(url, {
+    axios.get(`${backendurl}/meeting`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
       }
@@ -182,7 +200,7 @@ const Meeting = () => {
 
   //刪除
   const deleteHandler = (meetingid) => {
-    const deleteUrl = `${url}/${encodeURIComponent(meetingid)}`;
+    const deleteUrl = `${backendurl}/meeting/${meetingid}`;
 
     const confirm = window.confirm(`您確定要刪除這個會議嗎?`);
     if (confirm) {
@@ -215,6 +233,7 @@ const Meeting = () => {
       <div className='search'>
         <input
           type="text"
+          value={key}
           placeholder="...搜尋"
           onChange={(e) => {
             setKey(e.target.value)
@@ -223,15 +242,23 @@ const Meeting = () => {
         <input
           type='datetime-local'
           value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
+          onChange={(e) => {
+            setSelectedDate(e.target.value);
+          }}
         />
         <button className='meetingb' onClick={handleSearch}>查詢</button>
-        <button className='meetingb' onClick={() => {
-          setKey('');
-          setSelectedDate('');
-          agGridRef.current.api.setQuickFilter();
-          getMeetings();
-        }}>Reset</button>
+        <button className='meetingb'
+          onClick={() => {
+            if(selectedDate!==''){
+              setSelectedDate('');
+              getMeetings();
+            }
+            setKey('');
+            agGridRef.current.api.setQuickFilter();
+          }}
+        >
+          Reset
+        </button>
       </div>
       <div className='ag-theme-alpine center-table' style={{ height: '495px', width: '95vw' }}>
         <AgGridReact
@@ -242,9 +269,9 @@ const Meeting = () => {
           rowSelection='multiple'//同時選擇多行
           animateRows={true} //整行式變動
           // pagination={true} // 分頁
-          onGridReady={(event => {
+          onGridReady={event => {
             event.api.sizeColumnsToFit()
-          })}
+          }}
         />
       </div>
       <div className="button-container">

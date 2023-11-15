@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import binicon from '../../assets/bin.png';
 import wrenchicon from '../../assets/wrench.png';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './people.css';
 
@@ -41,19 +42,19 @@ const People = ({ loginData, setLoginData }) => {
   };
 
   const [rowData, setRowData] = useState([]);
-  const [key, setKey] = useState('')
-  const url = 'http://localhost:5000/user'
-  const agGridRef = useRef()
+  const [key, setKey] = useState('');
+  const agGridRef = useRef();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginStore();
+  const { backendurl } = useBackendurlStore();
 
   const handleDeleteClick = (id) => {
     // 刪除按鈕事件
     const confirmDelete = window.confirm(`確定要刪除該${id}員工資料嗎？`);
 
     if (confirmDelete) {
-      fetch(`http://localhost:5000/user/${id}`, {
+      fetch(`${backendurl}/user/${id}`, {
         method: "delete", headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }
@@ -122,7 +123,7 @@ const People = ({ loginData, setLoginData }) => {
 
 
   const getUsers = () => {
-    fetch(url, {
+    fetch(`${backendurl}/user`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
       }

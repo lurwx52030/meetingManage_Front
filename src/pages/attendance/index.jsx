@@ -7,6 +7,7 @@ import { AiOutlineCheckSquare, AiOutlineFrown } from "react-icons/ai";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import { RemarkModal } from '../../components/modals/RemarkModal';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './style.css';
 
@@ -24,6 +25,7 @@ function Attendance() {
     const location = useLocation();
     const [size, setSize] = useState([0, 0]);
     const { isLogin, setIsLogin } = useIsLoginStore();
+    const { backendurl } = useBackendurlStore();
 
 
     const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
@@ -238,7 +240,7 @@ function Attendance() {
 
     const getMembers = () => {
         // localhost:5000/meeting-member/meeting/M030
-        axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`, {
+        axios.get(`${backendurl}/meeting-member/meeting/${location.state.id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -258,7 +260,7 @@ function Attendance() {
     }
 
     const getAttendanceState = () => {
-        axios.get(`http://localhost:5000/meeting/${location.state.id}`,
+        axios.get(`${backendurl}/meeting/${location.state.id}`,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
@@ -282,7 +284,7 @@ function Attendance() {
     }
 
     const attendanceStateHandler = (type, id, state) => {
-        axios.get(`http://localhost:5000/meeting/${type}/${id}/${!state ? 1 : 0}`, {
+        axios.get(`${backendurl}/meeting/${type}/${id}/${!state ? 1 : 0}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -309,7 +311,7 @@ function Attendance() {
     }
 
     const checkinHandler = (id) => {
-        axios.get(`http://localhost:5000/meeting-member/signin/${location.state.id}/${id}`, {
+        axios.get(`${backendurl}/meeting-member/signin/${location.state.id}/${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -330,7 +332,7 @@ function Attendance() {
     }
 
     const checkoutHandler = (id) => {
-        axios.get(`http://localhost:5000/meeting-member/signout/${location.state.id}/${id}`, {
+        axios.get(`${backendurl}/meeting-member/signout/${location.state.id}/${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }

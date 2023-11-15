@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useBackendurlStore } from "../../store/backendUrlStore";
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './personal.css'; // 導入CSS
 
@@ -14,11 +15,12 @@ const Personal = () => {
   const location = useLocation();
 
   const { isLogin, setIsLogin } = useIsLoginStore();
+  const { backendurl } = useBackendurlStore();
 
 
   useEffect(() => {
     axios.get(
-      `http://localhost:5000/user/${userid}`,
+      `${backendurl}/user/${userid}`,
       {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
@@ -55,7 +57,7 @@ const Personal = () => {
     }
 
     axios.put(
-      `http://localhost:5000/user/account/${userid}`,
+      `${backendurl}/user/account/${userid}`,
       data,
       {
         headers: {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './createMeeting.css'; // 導入CSS
 
@@ -14,10 +15,11 @@ const CreateMeeting = () => {
     const [notificationTime, setNotificationTime] = useState(0);
 
     const { isLogin, setIsLogin } = useIsLoginStore();
+    const { backendurl } = useBackendurlStore();
 
     const [meetingRooms, setmeetingRooms] = useState([])
     useEffect(() => {
-        fetch('http://localhost:5000/meeting-room', {
+        fetch(`${backendurl}/meeting-room`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -74,7 +76,7 @@ const CreateMeeting = () => {
         };
         console.log(create)
 
-        fetch('http://localhost:5000/meeting', {
+        fetch(`${backendurl}/meeting`, {
             method: 'POST',
             body: JSON.stringify(create),
             headers: {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './updatemeeting.css'; // 導入CSS
 
@@ -21,6 +22,7 @@ const UpdateMeeting = () => {
     const [notificationTime, setNotificationTime] = useState(0);
 
     const { isLogin, setIsLogin } = useIsLoginStore();
+    const { backendurl } = useBackendurlStore();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -46,7 +48,7 @@ const UpdateMeeting = () => {
         setmeetingRoomId(location.state.meetingRoomId)
 
 
-        fetch('http://localhost:5000/meeting-room', {
+        fetch(`${backendurl}/meeting-room`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -105,7 +107,7 @@ const UpdateMeeting = () => {
             notificationTime
         };
 
-        fetch(`http://localhost:5000/meeting/${location.state.id}`, {
+        fetch(`${backendurl}/meeting/${location.state.id}`, {
             method: 'PUT',
             body: JSON.stringify(create),
             headers: {

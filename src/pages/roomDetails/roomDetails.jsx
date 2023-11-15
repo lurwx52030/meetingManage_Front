@@ -8,6 +8,7 @@ import {
 } from 'react-big-calendar';
 import { useLocation, useNavigate } from "react-router-dom";
 import { RoomStateMessage } from '../../components/roomStateMessage';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './roomDetails.css';
 
@@ -16,7 +17,8 @@ const RoomDetails = () => {
 
     const [meetingRooms, setmeetingRooms] = useState([]);
     const { isLogin, setIsLogin } = useIsLoginStore();
-    const navigate = useNavigate()
+    const { backendurl } = useBackendurlStore();
+    const navigate = useNavigate();
     const location = useLocation();
 
 
@@ -29,7 +31,7 @@ const RoomDetails = () => {
     }, [])
 
     const getMeetingsByMeetingRoom = () => {
-        fetch(`http://localhost:5000/meeting/room/${location.state.id}`, {
+        fetch(`${backendurl}/meeting/room/${location.state.id}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -87,7 +89,7 @@ const RoomDetails = () => {
             style={{ height: '100%' }}
         >
             <h2>會議室借用狀況-{location.state.name}</h2>
-            <div style={{ height: "80%", width: '80%',display:'flex',flexDirection:'row' }}>
+            <div style={{ height: "80%", width: '80%', display: 'flex', flexDirection: 'row' }}>
                 <div style={{ width: '95%' }}>
                     <Calendar
                         localizer={dayjsLocalizer(dayjs)}

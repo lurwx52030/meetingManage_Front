@@ -1,9 +1,8 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useEffect, useState } from 'react';
-import { BsFillChatLeftTextFill } from "react-icons/bs";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Modal } from 'semantic-ui-react';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 
 function RemarkModal({ meetingId, participant }) {
@@ -11,6 +10,7 @@ function RemarkModal({ meetingId, participant }) {
     const [remark, setRemark] = useState('');
 
     const { isLogin, setIsLogin } = useIsLoginStore();
+    const { backendurl } = useBackendurlStore();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,7 +26,7 @@ function RemarkModal({ meetingId, participant }) {
     const setRemarkHandler = () => {
         const p = { meetingId, employeeId: participant.id, remark }
 
-        fetch(`http://localhost:5000/meeting-member/remark`, {
+        fetch(`${backendurl}/meeting-member/remark`, {
             method: 'PUT',
             body: JSON.stringify(p),
             headers: {

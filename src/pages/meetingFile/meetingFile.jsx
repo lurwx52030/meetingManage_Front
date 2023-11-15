@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BsFillCloudArrowUpFill } from "react-icons/bs";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 
 function MeetingFile() {
@@ -32,6 +33,7 @@ function MeetingFile() {
     const [size, setSize] = useState([0, 0]);
 
     const { isLogin, setIsLogin } = useIsLoginStore();
+    const { backendurl } = useBackendurlStore();
 
     const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
         { headerName: '序號', field: 'id', filter: true, sortable: true, checkboxSelection: true },
@@ -108,7 +110,7 @@ function MeetingFile() {
             [...uploadFiles].forEach((file, i) => {
                 body.append('file', file, file.name)
             });
-            fetch(`http://localhost:5000/meeting-file/${location.state.id}`, {
+            fetch(`${backendurl}/meeting-file/${location.state.id}`, {
                 method: 'POST',
                 body,
                 headers: {
@@ -156,7 +158,7 @@ function MeetingFile() {
 
     const getfiles = () => {
         // localhost:5000/meeting-member/meeting/M030
-        axios.get(`http://localhost:5000/meeting-file/${location.state.id}`, {
+        axios.get(`${backendurl}/meeting-file/${location.state.id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -182,7 +184,7 @@ function MeetingFile() {
     //刪除
     const deleteHandler = (file) => {
         // localhost:5000/meeting-member/meeting/M030
-        axios.delete(`http://localhost:5000/meeting-file/${file}`, {
+        axios.delete(`${backendurl}/meeting-file/${file}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }

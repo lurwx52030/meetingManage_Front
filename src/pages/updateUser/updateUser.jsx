@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
+import { useBackendurlStore } from "../../store/backendUrlStore";
 import './updateUser.css'; // 導入CSS
 
 
@@ -11,14 +12,15 @@ const Updateuser = () => {
   const [uname, setUname] = useState('');
   const [uaccount, setUaccount] = useState('');
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
+  const {backendurl}=useBackendurlStore();
 
 
   //修改使用者資料(未完成)
   const submitActionHandler = (e) => {
     e.preventDefault();
     axios.get(
-      `http://localhost:5000/user/${id}`,
+      `${backendurl}/user/${id}`,
       {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
@@ -28,7 +30,7 @@ const Updateuser = () => {
         let user = res.data.data
         console.log(user)
         axios.put(
-          `http://localhost:5000/user/${user.id}`,
+          `${backendurl}/user/${user.id}`,
           {
             name: uname,
             account: uaccount

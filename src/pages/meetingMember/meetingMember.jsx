@@ -5,39 +5,16 @@ import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 
 function MeetingMember() {
     // 查詢，使用 employeeID 和 emoploeeName 進行篩選
     const handleSearch = () => {
         if (key !== '') {
-            axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-                    }
-
-                }
-            )
-                .then(res => {
-                    let result = res.data.data.filter(row => {
-                        return (
-                            row.id.toLowerCase().includes(key.toLowerCase()) || row.name.toLowerCase().includes(key.toLowerCase())
-                        );
-                    })
-
-                    setMembers(result);
-                });
+            agGridRef.current.api.setQuickFilter(key)
         } else if (key === '') {
-            axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-                }
-            })
-                .then(res => {
-                    let result = res.data.data;
-                    setMembers(result);
-                });
+            agGridRef.current.api.setQuickFilter();
         }
     };
 
@@ -55,6 +32,7 @@ function MeetingMember() {
     const [size, setSize] = useState([0, 0]);
 
     const { isLogin, setIsLogin } = useIsLoginStore();
+    const { backendurl } = useBackendurlStore();
 
     const [columnDefs, setColumnDefs] = useState([ //sortable:排序//filter:過濾器//editUserable:可編輯的
         { headerName: '員工id', field: 'id', filter: true, sortable: true, checkboxSelection: true },
@@ -113,7 +91,7 @@ function MeetingMember() {
             meetingId: location.state.id,
             employeeId: selectEmployee
         })
-        axios.post(`http://localhost:5000/meeting-member`, {
+        axios.post(`${backendurl}/meeting-member`, {
             meetingId: location.state.id,
             employeeId: selectEmployee
         }, {
@@ -147,7 +125,7 @@ function MeetingMember() {
     }
 
     const getEmployees = () => {
-        axios.get('http://localhost:5000/user/employee', {
+        axios.get('${backendurl}/user/employee', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -166,7 +144,7 @@ function MeetingMember() {
 
     const getMembers = () => {
         // localhost:5000/meeting-member/meeting/M030
-        axios.get(`http://localhost:5000/meeting-member/meeting/${location.state.id}`, {
+        axios.get(`${backendurl}/meeting-member/meeting/${location.state.id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -192,7 +170,7 @@ function MeetingMember() {
     //刪除
     const deleteHandler = (employee) => {
         // localhost:5000/meeting-member/meeting/M030
-        axios.delete(`http://localhost:5000/meeting-member/${location.state.id}/${employee}`, {
+        axios.delete(`${backendurl}/meeting-member/${location.state.id}/${employee}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
             }
@@ -222,20 +200,20 @@ function MeetingMember() {
             <h2 style={{ display: 'block' }}>會議參與者-{location.state.name}</h2>
             <div>
                 <div>
-                <input
-                    type="text"
-                    placeholder="...搜尋"
-                    onChange={(e) => {
-                        setKey(e.target.value)
-                    }}
-                />
-                <button
-                    style={{ marginLeft: '5px' }}
-                    className='meetingb'
-                    onClick={handleSearch}
-                >
-                    查詢
-                </button>
+                    <input
+                        type="text"
+                        placeholder="...搜尋"
+                        onChange={(e) => {
+                            setKey(e.target.value)
+                        }}
+                    />
+                    <button
+                        style={{ marginLeft: '5px' }}
+                        className='meetingb'
+                        onClick={handleSearch}
+                    >
+                        查詢
+                    </button>
                 </div>
                 <div style={{ marginTop: '10px' }}>
                     <select

@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './login.css'; // 導入CSS
 
 const Login = () => {
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
-  const { isLogin, setIsLogin } = useIsLoginStore()
+  const { isLogin, setIsLogin } = useIsLoginStore();
+  const { backendurl } = useBackendurlStore();
+
 
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     // 簡單的登入邏輯，要視實際情況
     e.preventDefault()
     const user = { account, password };
-    fetch('http://localhost:5000/auth/login', {
+    fetch(`${backendurl}/auth/login`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {

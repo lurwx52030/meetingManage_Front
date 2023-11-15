@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Navigation from './components/navigation/navigation';
 import Attendance from './pages/attendance';
@@ -15,10 +15,20 @@ import RoomDetails from './pages/roomDetails/roomDetails';
 import Sign from './pages/sign/sign';
 import UpdateMeeting from './pages/updateMeeting/updateMeeting';
 import Updateuser from './pages/updateUser/updateUser';
+import { useBackendurlStore } from './store/backendUrlStore';
 
 
 
 const App = () => {
+
+  // awake backend
+  const { backendurl } = useBackendurlStore();
+  useEffect(() => {
+    fetch(`${backendurl}/a`)
+      .then((res) => res.json())
+      .then(res => console.log('backend awake！'))
+  })
+
   return (
     <Router>
       <div style={{ width: '100%', height: '100%' }}>

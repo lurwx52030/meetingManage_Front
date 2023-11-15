@@ -23,6 +23,9 @@ const App = () => {
 
   // awake backend
   const { backendurl } = useBackendurlStore();
+
+  const root='meetingManage_Front'
+
   useEffect(() => {
     fetch(`${backendurl}/a`)
       .then((res) => res.json())
@@ -30,7 +33,7 @@ const App = () => {
   })
 
   return (
-    <Router>
+    <Router basename={root}>
       <div style={{ width: '100%', height: '100%' }}>
         <Navigation />
         <div style={{ width: '100%', height: '80%' }}>

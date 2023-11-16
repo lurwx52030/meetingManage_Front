@@ -72,7 +72,7 @@ const UpdateMeeting = () => {
                         localStorage.removeItem("jwtToken")
                         localStorage.removeItem('userid')
                         setIsLogin(false)
-                        navigate('/')
+                        navigate('/login')
                         break;
                     default:
                         alert(error.message)
@@ -137,12 +137,12 @@ const UpdateMeeting = () => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="createmeeting">
-                <h2 style={{ width: "40%", height: "20%" }}>更新會議</h2>
+                <h2 style={{ marginRight:'30%', width: "40%", height: "20%" ,marginBottom:'25px'}}>更新會議</h2>
                 <div style={{ width: "40%", height: "80%" }}>
                     <div className='createmeeting_row'>
                         <div>
                             <label><b>會議名稱：</b></label>
-                            <input type="text" value={name} onChange={(e) => setname(e.target.value)} />
+                            <input style={{ height: '30px'}} type="text" value={name} onChange={(e) => setname(e.target.value)} />
                         </div>
                     </div>
                     <div className='createmeeting_row'>
@@ -150,10 +150,11 @@ const UpdateMeeting = () => {
                             <label><b>會議通知：</b></label>
                             <input type="radio" name="announcement" value="Open" id="open" checked={announcement === "Open"} onChange={onOptionChange} />
                             <label htmlFor='open'>開啟</label>
-                            <input type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
+                            <input style={{marginLeft:'15px'}} type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
                             <label htmlFor='close'>關閉</label>
                             {announcement === 'Open' && (
                                 <select
+                                    style={{marginLeft:'15px'}}
                                     className="custom-select"
                                     id="shopSearchSelect"
                                     value={notificationTime}
@@ -197,8 +198,9 @@ const UpdateMeeting = () => {
                             </select>
                         </div>
                     </div>
-                    <div className='createmeeting_row'>
-                        <button type="create"><b>建立</b></button>
+                    <div className='updatemeeting_row'>
+                        <button style={{backgroundColor: 'aliceblue',border: 'none',borderRadius: '5px',color: '#0a0a0a',cursor:'pointer',fontSize:'16px'}} 
+                        type="updatemeet"><b>更新</b></button>
                     </div>
                 </div>
             </div>

@@ -62,29 +62,29 @@ const Updateuser = () => {
 
   return (
     <form className="createmeeting" onSubmit={submitActionHandler}>
-      <div style={{ width: "30%", height: "20%" }}><h2>修改資料</h2></div>
+      <div style={{ marginLeft:'5%' , width: "30%", height: "20%" }}><h2>修改資料</h2></div>
       <div style={{ width: "30%", height: "80%" }}>
-        <div className='createmeeting_row'>
+        <div className='createmeeting_row' >
           <div>
-            <label><b>員工編號</b></label><br></br>
-            <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
+            <label style={{fontSize:'17px'}}><b>員工編號</b></label><br></br>
+            <input style={{height:'30px'}} type="text" value={id} onChange={(e) => setId(e.target.value)} />
           </div>
         </div>
         <div className='createmeeting_row'>
           <div>
-            <label><b>帳號</b></label><br></br>
-            <input type="text" value={uaccount} onChange={(e) => setUaccount(e.target.value)} />
+            <label style={{fontSize:'17px'}}><b>帳號</b></label><br></br>
+            <input style={{height:'30px'}} type="text" value={uaccount} onChange={(e) => setUaccount(e.target.value)} />
           </div>
         </div>
         <div className='createmeeting_row'>
           <div>
-            <label><b>姓名</b></label><br></br>
-            <input type="text" value={uname} onChange={(e) => setUname(e.target.value)} />
+            <label style={{fontSize:'17px'}}><b>姓名</b></label><br></br>
+            <input style={{height:'30px'}} type="text" value={uname} onChange={(e) => setUname(e.target.value)} />
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: 'row' }}>
-          <button className="meetingb" style={{marginRight:'5px'}} type="submit">確認</button>
-          <button className="meetingb" onClick={() => navigate('/People')}>取消</button>
+          <button  className="meetingb" style={{marginLeft:'10px'}} type="submit">確認</button>
+          <button className="meetingb" style={{marginLeft:'50px'}} onClick={() => navigate('/People')}>取消</button>
         </div>
       </div>
     </form>

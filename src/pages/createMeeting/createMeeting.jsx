@@ -126,7 +126,7 @@ const CreateMeeting = () => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="createmeeting">
-                <div style={{ width: "40%", height: "20%" }}><h2>建立會議</h2></div>
+                <div style={{ marginRight: '30%', width: "40%", height: "20%", marginBottom: '25px' }}><h2 >建立會議</h2></div>
                 <div style={{ width: "40%", height: "80%" }}>
                     <div className='createmeeting_row'>
                         <div>
@@ -139,10 +139,11 @@ const CreateMeeting = () => {
                             <label><b>會議通知：</b></label>
                             <input type="radio" name="announcement" value="Open" id="open" checked={announcement === "Open"} onChange={onOptionChange} />
                             <label htmlFor='open'>開啟</label>
-                            <input type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
+                            <input style={{ marginLeft: '15px' }} type="radio" name="announcement" value="Close" id="close" checked={announcement === "Close"} onChange={onOptionChange} />
                             <label htmlFor='close'>關閉</label>
                             {announcement === 'Open' && (
                                 <select
+                                    style={{ marginLeft: '15px' }}
                                     className="custom-select"
                                     id="shopSearchSelect"
                                     value={notificationTime}
@@ -190,7 +191,19 @@ const CreateMeeting = () => {
                         </div>
                     </div>
                     <div className='createmeeting_row'>
-                        <button type="meetingb"><b>建立</b></button>
+                        <button
+                            type="meetingb"
+                            style={{
+                                backgroundColor: 'aliceblue',
+                                border: 'none',
+                                borderRadius: '5px',
+                                color: '#0a0a0a',
+                                cursor: 'pointer',
+                                fontSize: '16px'
+                            }}
+                        >
+                            <b>建立</b>
+                        </button>
                     </div>
                 </div>
             </div>

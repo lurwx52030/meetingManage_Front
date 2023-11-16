@@ -46,9 +46,9 @@ const Sign = () => {
 
   return (
     <div className="sign-container">
-      <h2>註冊會員</h2>
+      <h2 style={{ marginLeft:'5%' , width: "30%", height: "20%" ,marginBottom:'35px',marginTop:'55px'}}>註冊會員</h2>
       <form className="signform-container" onSubmit={handleSubmit}>
-        <div className='row1'>
+        <div className='row1'  style={{marginRight:'130%',marginTop:'80px'}}>
           <div>
             <label><b>姓名</b></label><br></br>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
@@ -59,7 +59,7 @@ const Sign = () => {
           </div>
         </div>
 
-        <div className='row1'>
+        <div className='row1' style={{marginRight:'130%'}}>
           <div>
             <label><b>帳號</b></label><br></br>
             <input type="text" value={account} onChange={(e) => setAccount(e.target.value)} />
@@ -70,15 +70,15 @@ const Sign = () => {
           </div>
         </div>
 
-        <div className='row1'>
+        <div className='row1' style={{marginRight:'130%'}}>
           <div>
             <label><b>員工編號</b></label><br></br>
             <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
           </div>
         </div>
 
-        <div className='button'>
-          <input type="submit" value="註冊" />
+        <div className='button' style={{marginRight:'140%'}}>
+          <input style={{backgroundColor: 'aliceblue',border: 'none',borderRadius: '5px',color: '#0a0a0a',cursor:'pointer',fontSize:'16px'}} type="submit" value="註冊" />
         </div>
 
       </form>

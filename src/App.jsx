@@ -24,7 +24,15 @@ const App = () => {
   // awake backend
   const { backendurl } = useBackendurlStore();
 
-  const root='meetingManage_Front'
+  let root = '';
+  useEffect(() => { console.log(import.meta.env) }, []);
+
+  if (import.meta.env.MODE === 'development') {
+    root = '';
+  } else {
+    root = 'meetingManage_Front';
+  }
+
 
   useEffect(() => {
     fetch(`${backendurl}/a`)

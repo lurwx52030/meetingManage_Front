@@ -48,12 +48,12 @@ const Login = () => {
 
   return (
     <div className="root-container ">
-      <h2>會員登入</h2>
+      <h2 style={{ marginLeft:'8%' ,marginTop:'115px'}}>會員登入</h2>
       <form className="form-container" onSubmit={handleSubmit}>
-        <div className='loginContainer'>
+        <div className='loginContainer' style={{marginRight:'130%'}}>
           <div>
             <b>帳號</b>
-            <input type="text" value={account} onChange={(e) => setAccount(e.target.value)} />
+            <input style={{marginBottom:'25px'}} type="text" value={account} onChange={(e) => setAccount(e.target.value)} />
           </div>
           <div>
             <b>密碼</b>

@@ -2,9 +2,10 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
-import binicon from '../../assets/bin.png';
-import wrenchicon from '../../assets/wrench.png';
+// import binicon from '../../assets/bin.png';
+// import wrenchicon from '../../assets/wrench.png';
 import { useBackendurlStore } from '../../store/backendUrlStore';
 import { useIsLoginStore } from '../../store/useIsLoginStore';
 import './people.css';
@@ -22,8 +23,8 @@ const OperateCellRenderer = (params) => {
 
   return (
     <div className="button-container">
-      <button className="edit1-button" onClick={() => handleEditClick(params.meetingid)}><img src={wrenchicon} className="wrenchicon" alt="wrenchicon" /></button>
-      <button className="delete1-button" onClick={() => handleDeleteClick(params.meetingid)}><img src={binicon} className="binicon" alt="binicon" /></button>
+      <Button className="edit1-button" onClick={() => handleEditClick(params.meetingid)} icon='configure'/>
+      <Button className="delete1-button" onClick={() => handleDeleteClick(params.meetingid)} icon='trash'/>
     </div>
   );
 };
@@ -91,18 +92,20 @@ const People = ({ loginData, setLoginData }) => {
     {
       headerName: '修改/刪除', field: 'operate', cellRenderer: (params) => (
         <div className="button-container">
-          <button
+          <Button
             className="edit1-button"
             onClick={() => handleEditClick(params.data)}
+            icon='configure'
           >
-            <img src={wrenchicon} className="wrenchicon" alt="wrenchicon" />
-          </button>
-          <button
+            
+          </Button>
+          <Button
             className="delete1-button"
             onClick={() => handleDeleteClick(params.data.id)}
+            icon='trash'
           >
-            <img src={binicon} className="binicon" alt="binicon" />
-          </button>
+            
+          </Button>
         </div>
       )
       , cellRendererParams: {
@@ -145,7 +148,7 @@ const People = ({ loginData, setLoginData }) => {
             localStorage.removeItem("jwtToken")
             localStorage.removeItem('userid')
             alert("請重新登入！")
-            navigate("/")
+            navigate("/login")
             setIsLogin(false)
             break;
           case 403:

@@ -24,12 +24,22 @@
 
 
 .background h1 {
-  font-size: 65px;
-  color: rgb(89, 88, 88);
+  font-size: 75px;
+  color: rgb(67, 67, 67);
   text-shadow: 2px 2px 4px rgba(238, 234, 234, 0.3);
   position: absolute;
-  top: 125px;
+  top: 145px;
   left: 250px;
+  z-index: 1;
+}
+
+.background h2 {
+  font-size: 25px;
+  color: rgb(67, 67, 67);
+  text-shadow: 2px 2px 4px rgba(238, 234, 234, 0.3);
+  position: absolute;
+  top: 235px;
+  left: 390px;
   z-index: 1;
 }
 

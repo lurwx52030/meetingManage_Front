@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const useBackendurlStore = create((set, get) => ({
-    backendurl: 'https://meeting-manage-backend.onrender.com',
+    backendurl: (import.meta.env.MODE === 'development') ? 'http://localhost:5000' : 'https://meeting-manage-backend.onrender.com',
 }))
 
 export { useBackendurlStore };

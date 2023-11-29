@@ -2,4 +2,3 @@
 - ~~加入會議狀態填色說明~~
 - ~~研究column filter以區分簽到退狀態~~
 - ~~研究ag-grid的filtermodel怎麼判別params的值是不是undefined~~
-- 研究`開始時間`、`結束時間`的filter，使其判斷是不是介於開始前30分鐘到結束後30分鐘

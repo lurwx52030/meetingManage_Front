@@ -132,12 +132,17 @@ function MeetingMember() {
         }).then(res => {
             setEmployees(res.data.data)
         }).catch(err => {
-            if (err.response.status === 401) {
-                alert("請重新登入！")
-                localStorage.removeItem("jwtToken")
-                localStorage.removeItem('userid')
-                setIsLogin(false)
-                navigate('/')
+            switch (err.response.status) {
+                case 401:
+                    alert("請重新登入！")
+                    localStorage.removeItem("jwtToken");
+                    localStorage.removeItem('userid');
+                    setIsLogin(false);
+                    navigate('/');
+                    break;
+                default:
+                    alert(`status=${err.response.data.statusCode}\nmessage=${err.response.data.message}`);
+                    break;
             }
         })
     }
@@ -152,12 +157,17 @@ function MeetingMember() {
             setMembers(res.data.data)
         }).catch(err => {
             console.log(err)
-            if (err.response.status === 401) {
-                alert("請重新登入！")
-                localStorage.removeItem("jwtToken")
-                localStorage.removeItem('userid')
-                setIsLogin(false)
-                navigate('/')
+            switch (err.response.status) {
+                case 401:
+                    alert("請重新登入！")
+                    localStorage.removeItem("jwtToken");
+                    localStorage.removeItem('userid');
+                    setIsLogin(false);
+                    navigate('/');
+                    break;
+                default:
+                    alert(`status=${err.response.data.statusCode}\nmessage=${err.response.data.message}`);
+                    break;
             }
         })
     }
@@ -185,12 +195,17 @@ function MeetingMember() {
             }
         }).catch(err => {
             console.log(err)
-            if (err.response.status === 401) {
-                alert("請重新登入！")
-                localStorage.removeItem("jwtToken")
-                localStorage.removeItem('userid')
-                setIsLogin(false)
-                navigate('/')
+            switch (err.response.status) {
+                case 401:
+                    alert("請重新登入！")
+                    localStorage.removeItem("jwtToken");
+                    localStorage.removeItem('userid');
+                    setIsLogin(false);
+                    navigate('/');
+                    break;
+                default:
+                    alert(`status=${err.response.data.statusCode}\nmessage=${err.response.data.message}`);
+                    break;
             }
         })
     };

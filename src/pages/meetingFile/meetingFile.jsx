@@ -108,8 +108,11 @@ function MeetingFile() {
                 return;
             }
             [...uploadFiles].forEach((file, i) => {
+                console.log(file)
                 body.append('file', file, file.name)
             });
+
+
             fetch(`${backendurl}/meeting-file/${location.state.id}`, {
                 method: 'POST',
                 body,
@@ -142,13 +145,8 @@ function MeetingFile() {
                             navigate("/");
                             setIsLogin(false);
                             break;
-                        case 403:
-                            alert("您沒有權限！");
-                            navigate("/");
-                            break;
                         default:
-                            alert(e.message);
-                            navigate('/meeting');
+                            alert(`statusCode=${e.statusCode}\nmessage=${e.message}`);
                             break;
                     }
                 })
@@ -166,12 +164,17 @@ function MeetingFile() {
             setFiles(res.data.data)
         }).catch(err => {
             console.log(err)
-            if (err.response.status === 401) {
-                alert("請重新登入！")
-                localStorage.removeItem("jwtToken")
-                localStorage.removeItem('userid')
-                setIsLogin(false)
-                navigate('/')
+            switch (err.response.status) {
+                case 401:
+                    alert("請重新登入！");
+                    localStorage.removeItem("jwtToken");
+                    localStorage.removeItem('userid');
+                    setIsLogin(false);
+                    navigate('/');
+                    break;
+                default:
+                    alert(`status=${err.response.data.statusCode}\nmessage=${err.response.data.message}`);
+                    break;
             }
         })
     }
@@ -200,12 +203,17 @@ function MeetingFile() {
             }
         }).catch(err => {
             console.log(err)
-            if (err.response.status === 401) {
-                alert("請重新登入！")
-                localStorage.removeItem("jwtToken")
-                localStorage.removeItem('userid')
-                setIsLogin(false)
-                navigate('/')
+            switch (err.response.status) {
+                case 401:
+                    alert("請重新登入！");
+                    localStorage.removeItem("jwtToken");
+                    localStorage.removeItem('userid');
+                    setIsLogin(false);
+                    navigate('/');
+                    break;
+                default:
+                    alert(`status=${err.response.data.statusCode}\nmessage=${err.response.data.message}`);
+                    break;
             }
         })
     };
@@ -256,7 +264,7 @@ function MeetingFile() {
                     </button>
                 </div>
             </form>
-            <div className='ag-theme-alpine' style={{ height: '460px', width: '95vw',marginTop:'15px' }}>
+            <div className='ag-theme-alpine' style={{ height: '460px', width: '95vw', marginTop: '15px' }}>
                 <AgGridReact
                     ref={agGridRef}
                     rowData={files}

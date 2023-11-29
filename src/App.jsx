@@ -25,7 +25,7 @@ const App = () => {
   const { backendurl } = useBackendurlStore();
 
   let root = '';
-  useEffect(() => { console.log(import.meta.env) }, []);
+  // useEffect(() => { console.log(import.meta.env) }, []);
 
   if (import.meta.env.MODE === 'development') {
     root = '';

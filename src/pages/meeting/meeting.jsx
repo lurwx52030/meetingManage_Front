@@ -216,12 +216,17 @@ const Meeting = () => {
           }
         }
       }).catch(err => {
-        if (err.response.status === 401) {
-          alert("請重新登入！")
-          localStorage.removeItem("jwtToken")
-          localStorage.removeItem('userid')
-          setIsLogin(false)
-          navigate('/')
+        switch (err.response.status) {
+          case 401:
+            alert("請重新登入！")
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem('userid');
+            setIsLogin(false);
+            navigate('/');
+            break;
+          default:
+            alert(`status=${err.response.data.statusCode}\nmessage=${err.response.data.message}`);
+            break;
         }
       })
     }
@@ -249,7 +254,7 @@ const Meeting = () => {
         <button className='meetingb' onClick={handleSearch}>查詢</button>
         <button className='meetingb'
           onClick={() => {
-            if(selectedDate!==''){
+            if (selectedDate !== '') {
               setSelectedDate('');
               getMeetings();
             }
